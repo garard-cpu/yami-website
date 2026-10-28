@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" role="img" aria-label="Yami, a round cardinal bunny wearing a gold Trojan helmet">
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2=".6" y2="1">
+      <stop offset="0" stop-color="#D6404A"/>
+      <stop offset="1" stop-color="#A3121C"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE27A"/>
+      <stop offset="1" stop-color="#EDB12A"/>
+    </linearGradient>
+    <linearGradient id="crest" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C21824"/>
+      <stop offset="1" stop-color="#7A0008"/>
+    </linearGradient>
+  </defs>
+  <!-- ears, poking up through the top of the helmet -->
+  <path d="M80 66C80 30 70 8 54 10c-16 3-12 34 10 58z" fill="url(#fur)"/>
+  <path d="M75 62C75 36 67 22 58 24c-9 2-7 24 9 40z" fill="#FFD9C9"/>
+  <path d="M120 66C120 30 130 8 146 10c16 3 12 34-10 58z" fill="url(#fur)"/>
+  <path d="M125 62C125 36 133 22 142 24c9 2 7 24-9 40z" fill="#FFD9C9"/>
+  <!-- body -->
+  <path d="M100 62c48 0 72 34 72 74 0 42-30 68-72 68s-72-26-72-68c0-40 24-74 72-74z" fill="url(#fur)"/>
+  <ellipse cx="100" cy="178" rx="36" ry="24" fill="#FFF4E6"/>
+  <ellipse cx="100" cy="150" rx="20" ry="13" fill="#FFF4E6"/>
+  <ellipse cx="62" cy="152" rx="10" ry="6.5" fill="#FFB3B3" opacity=".8"/>
+  <ellipse cx="138" cy="152" rx="10" ry="6.5" fill="#FFB3B3" opacity=".8"/>
+  <!-- eyes -->
+  <ellipse cx="78" cy="128" rx="15" ry="17" fill="#2B1414"/>
+  <ellipse cx="78" cy="131" rx="10" ry="11" fill="#6B2A22"/>
+  <ellipse cx="78" cy="130" rx="6" ry="7" fill="#1E0E0E"/>
+  <circle cx="83" cy="122" r="5" fill="#fff"/>
+  <circle cx="73" cy="134" r="2.2" fill="#fff"/>
+  <ellipse cx="122" cy="128" rx="15" ry="17" fill="#2B1414"/>
+  <ellipse cx="122" cy="131" rx="10" ry="11" fill="#6B2A22"/>
+  <ellipse cx="122" cy="130" rx="6" ry="7" fill="#1E0E0E"/>
+  <circle cx="127" cy="122" r="5" fill="#fff"/>
+  <circle cx="117" cy="134" r="2.2" fill="#fff"/>
+  <!-- nose and smile -->
+  <path d="M95 144q5 5 10 0q-5-4-10 0z" fill="#F28FA5"/>
+  <path d="M92 154q8 7 16 0" stroke="#2B1414" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- Trojan helmet, shaped to the head: dome down to the brow, cheek guards along the face -->
+  <path d="M30 120C24 70 52 52 100 52S176 70 170 120L160 118C156 112 146 106 136 104Q100 96 64 104C54 106 44 112 40 118z" fill="url(#gold)"/>
+  <path d="M30 116C28 136 34 152 46 160C52 148 52 132 46 116z" fill="url(#gold)"/>
+  <path d="M170 116C172 136 166 152 154 160C148 148 148 132 154 116z" fill="url(#gold)"/>
+  <path d="M42 114Q100 92 158 114" stroke="#D3961C" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M48 86Q66 66 92 62" stroke="#FFF3C2" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/>
+  <circle cx="40" cy="126" r="3.2" fill="#D3961C"/>
+  <circle cx="160" cy="126" r="3.2" fill="#D3961C"/>
+  <!-- crest: a bristly brush running front to back over the top -->
+  <path d="M86 56C84 32 92 14 108 10C128 6 146 18 150 36C142 30 132 30 124 34C116 38 112 46 112 56z" fill="url(#crest)"/>
+  <path d="M94 50c0-14 6-28 18-34M104 52c2-14 10-24 22-26M116 46c6-8 16-10 26-8" stroke="#E8565E" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".75"/>
+  <path d="M84 58Q98 50 114 56" stroke="#D3961C" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg>
