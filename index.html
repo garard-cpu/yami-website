@@ -9,6 +9,8 @@
 <meta property="og:description" content="Snap your plate, get one easy next step. Join the waitlist with your USC email.">
 <meta name="theme-color" content="#990000">
 <link rel="icon" href="yami-trojan.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Yami">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
@@ -206,9 +208,28 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
 .share { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; border: var(--line); background: var(--pink); color: var(--ink); font: 800 16px/1 var(--display); text-transform: lowercase; padding: 14px 22px; border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
 .share-done { font-size: 14px; color: var(--muted); min-height: 1.4em; }
 
+/* Get the app: install steps per phone */
+.get-box { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.how { background: #fff; border: var(--line); border-radius: 26px; padding: 24px; box-shadow: 6px 6px 0 var(--ink); }
+.how.mine { background: var(--blush); box-shadow: 8px 8px 0 var(--cardinal), 8px 8px 0 2.5px var(--ink); }
+.how h3 { font-size: 22px; font-weight: 800; text-transform: lowercase; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.how .yours { font: 800 12px/1 var(--display); background: var(--gold); border: 2px solid var(--ink); border-radius: 999px; padding: 5px 9px; text-transform: lowercase; }
+.how ol { margin: 14px 0 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+.how li { counter-increment: s; position: relative; padding-left: 40px; font-weight: 500; }
+.how li::before { content: counter(s); position: absolute; left: 0; top: -2px; width: 28px; height: 28px; border-radius: 50%; background: var(--pink); border: 2px solid var(--ink); display: grid; place-items: center; font: 900 13px/1 var(--display); }
+.how .ico { display: inline-block; border: 1.5px solid var(--ink); border-radius: 6px; padding: 0 5px; font-weight: 700; background: #fff; }
+.get-cta { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+.get-cta .cta { background: var(--cardinal); color: #fff; }
+.get-cta .cta:hover { color: var(--ink); }
+.get-note { margin: 0; color: var(--muted); font-size: 15px; max-width: 46ch; }
+.link-pill { display: inline-block; margin-top: 8px; font: 700 14px/1 var(--body); background: #fff; border: 2px dashed var(--ink); border-radius: 999px; padding: 10px 14px; user-select: all; }
+.hero .alt { display: inline-block; margin-left: 14px; color: #fff; font-weight: 700; }
+
 /* Phone-only sticky button */
 .sticky-cta { display: none; }
 @media (max-width: 820px) {
+  .get-box { grid-template-columns: 1fr; }
+  .hero .alt { display: block; margin: 16px 0 0; }
   .try-box { grid-template-columns: 1fr; }
   .promises { grid-template-columns: 1fr 1fr; }
   .sticky-cta { display: flex; position: fixed; z-index: 20; left: 16px; right: 16px; bottom: max(14px, env(safe-area-inset-bottom, 0px)); justify-content: center; background: var(--cardinal); color: #fff; border: var(--line); border-radius: 999px; padding: 16px; font: 800 16px/1 var(--display); text-transform: lowercase; text-decoration: none; box-shadow: 4px 4px 0 var(--ink); transition: transform .2s, opacity .2s; }
@@ -222,14 +243,14 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
 <header class="hero">
   <div class="wrap nav">
     <div class="logo"><img src="yami-trojan.svg" alt="" width="40" height="44">yami</div>
-    <a href="#join">get on the list</a>
+    <a href="#get">get the app</a>
   </div>
   <div class="wrap">
     <div>
       <span class="sticker">built at usc, for usc</span>
       <h1>eating well at usc, but make it <span class="hl">easy.</span></h1>
       <p class="lede">Snap your plate at the Village, Parkside or anywhere near campus. Yami tells you what's on it and the one thing to add next. No calorie math. No guilt.</p>
-      <a class="cta" href="#join">get early access &rarr;</a>
+      <a class="cta" href="#get">get the app, free &rarr;</a><a class="alt" href="#join">or join the list</a>
       <ul class="halls" aria-label="Where Yami works">
         <li>the village</li><li>parkside</li><li>starbucks</li><li>chipotle</li><li>grocery runs</li>
       </ul>
@@ -286,6 +307,40 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
           <ul class="vibes" id="v-vibes"></ul>
           <p class="demo-note">Sample results to show the idea. The app reads your real photo.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="get" style="padding-top: 0">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="sticker">get the app</span>
+        <h2>put yami on your home screen.</h2>
+        <p class="get-note" style="margin-top:14px">No app store, no download. Yami opens from an icon like any other app. Free while we test with USC students.</p>
+      </div>
+      <div class="get-box">
+        <div class="how" id="how-iphone">
+          <h3>iphone</h3>
+          <ol>
+            <li>Open <b>yami-usc.netlify.app/app</b> in <b>Safari</b>.</li>
+            <li>Tap <span class="ico">Share</span>, the square with the arrow.</li>
+            <li>Scroll down and tap <span class="ico">Add to Home Screen</span>, then <span class="ico">Add</span>.</li>
+            <li>Open Yami from your home screen and set up your profile there.</li>
+          </ol>
+        </div>
+        <div class="how" id="how-android">
+          <h3>android</h3>
+          <ol>
+            <li>Open <b>yami-usc.netlify.app/app</b> in <b>Chrome</b>.</li>
+            <li>Tap the <span class="ico">&#8942;</span> menu in the top corner.</li>
+            <li>Tap <span class="ico">Add to Home screen</span> or <span class="ico">Install app</span>.</li>
+            <li>Open Yami from your home screen and set up your profile there.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="get-cta">
+        <a class="cta" href="app/?utm_source=website">open yami &rarr;</a>
+        <p class="get-note">On a laptop? Open this link on your phone: <span class="link-pill">yami-usc.netlify.app/app</span></p>
       </div>
     </div>
   </section>
@@ -363,7 +418,8 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       <div class="faq">
         <details><summary>is this a calorie counter?</summary><p>No. Yami looks at what's on your plate and suggests one easy add or swap. If you ever want numbers, they're there, but they're not the point.</p></details>
         <details><summary>is it actually from usc?</summary><p>It's built by USC students, but it's a student project. It's not official and not endorsed by the university.</p></details>
-        <details><summary>when can i use it?</summary><p>We're testing with USC students now. Join the list and you'll be first in, plus you get the top 5 meals list before launch.</p></details>
+        <details><summary>when can i use it?</summary><p>Right now. Add Yami to your home screen with the steps above. It's an early version we're testing with USC students, so tell us what's off. Join the list to get launch news and the top 5 meals list.</p></details>
+        <details><summary>do i need an account?</summary><p>Not yet. Your profile is saved on your phone, so open Yami from the home screen icon each time. If you delete the icon or clear Safari data, you'll set it up again.</p></details>
         <details><summary>what happens to my email?</summary><p>We only use it to tell you when Yami is ready. No spam, and you can opt out anytime.</p></details>
       </div>
     </div>
@@ -429,7 +485,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   </section>
 </main>
 
-<a class="sticky-cta" href="#join" data-hidden="true">get early access &rarr;</a>
+<a class="sticky-cta" href="#get" data-hidden="true">get the app &rarr;</a>
 
 <footer>
   <div class="wrap">
@@ -501,6 +557,16 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.plate); }); });
   show('parkside');
 
+  // Get the app: put the visitor's own phone first and mark it.
+  var ua = navigator.userAgent || '';
+  var mine = /iPhone|iPad|iPod/.test(ua) ? 'how-iphone' : /Android/.test(ua) ? 'how-android' : null;
+  if (mine) {
+    var card = document.getElementById(mine);
+    card.classList.add('mine');
+    card.querySelector('h3').insertAdjacentHTML('beforeend', '<span class="yours">your phone</span>');
+    card.parentNode.insertBefore(card, card.parentNode.firstChild);
+  }
+
   // Phone sticky button: hide while the hero button or the form is on screen.
   var sticky = document.querySelector('.sticky-cta');
   if ('IntersectionObserver' in window) {
@@ -511,6 +577,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
     });
     io.observe(document.querySelector('.hero'));
     io.observe(document.getElementById('join'));
+    io.observe(document.getElementById('get'));
   }
 
   // Share after joining, tagged so friend sign-ups show up as their own source.
