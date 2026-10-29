@@ -6,7 +6,7 @@
 <title>Yami</title>
 <meta name="description" content="USC's easiest way to eat well. Snap your plate at the Village, Parkside or any restaurant near campus, and Yami tells you the one thing to add next. Built at USC, for USC.">
 <meta property="og:title" content="Yami: USC's easiest way to eat well">
-<meta property="og:description" content="Snap your plate, get one easy next step. Join the waitlist with your USC email.">
+<meta property="og:description" content="Snap your plate, get one easy next step. Free on your phone for USC students.">
 <meta name="theme-color" content="#990000">
 <link rel="icon" href="yami-trojan.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -250,7 +250,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       <span class="sticker">built at usc, for usc</span>
       <h1>eating well at usc, but make it <span class="hl">easy.</span></h1>
       <p class="lede">Snap your plate at the Village, Parkside or anywhere near campus. Yami tells you what's on it and the one thing to add next. No calorie math. No guilt.</p>
-      <a class="cta" href="#get">get the app, free &rarr;</a><a class="alt" href="#join">or join the list</a>
+      <a class="cta" href="#get">get the app, free &rarr;</a><a class="alt" href="#join">or get the top 5 meals list</a>
       <ul class="halls" aria-label="Where Yami works">
         <li>the village</li><li>parkside</li><li>starbucks</li><li>chipotle</li><li>grocery runs</li>
       </ul>
@@ -392,11 +392,11 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   <section style="padding-top: 0">
     <div class="wrap">
       <div class="only">
-        <span class="sticker lock">🔒 members only</span>
+        <span class="sticker lock">🔒 usc only</span>
         <div>
           <span class="sticker">only on yami</span>
           <h2>the top 5 protein-packed, budget-friendly meals at usc.</h2>
-          <p style="color:#ffe1db;margin:14px 0 0">Join the waitlist and we'll send you the list before launch.</p>
+          <p style="color:#ffe1db;margin:14px 0 0">Drop your USC email and we'll send you the list.</p>
         </div>
         <ol aria-label="Preview of the list, revealed when you join">
           <li class="blur"><span>Dining hall pick, revealed soon</span></li>
@@ -418,7 +418,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       <div class="faq">
         <details><summary>is this a calorie counter?</summary><p>No. Yami looks at what's on your plate and suggests one easy add or swap. If you ever want numbers, they're there, but they're not the point.</p></details>
         <details><summary>is it actually from usc?</summary><p>It's built by USC students, but it's a student project. It's not official and not endorsed by the university.</p></details>
-        <details><summary>when can i use it?</summary><p>Right now. Add Yami to your home screen with the steps above. It's an early version we're testing with USC students, so tell us what's off. Join the list to get launch news and the top 5 meals list.</p></details>
+        <details><summary>when can i use it?</summary><p>Right now. Add Yami to your home screen with the steps above. It's an early version we're testing with USC students, so tell us what's off. Drop your USC email below to get the top 5 meals list and updates.</p></details>
         <details><summary>do i need an account?</summary><p>Not yet. Your profile is saved on your phone, so open Yami from the home screen icon each time. If you delete the icon or clear Safari data, you'll set it up again.</p></details>
         <details><summary>what happens to my email?</summary><p>We only use it to tell you when Yami is ready. No spam, and you can opt out anytime.</p></details>
       </div>
@@ -429,8 +429,8 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
     <div class="wrap">
       <div class="join">
         <div id="join-form">
-          <h2>be first on yami.</h2>
-          <p class="sub">We're opening to USC students first. Use your @usc.edu email.</p>
+          <h2>get the top 5 list.</h2>
+          <p class="sub">The top 5 protein-packed, budget-friendly meals at USC, plus a heads-up when Yami adds something new. Use your @usc.edu email.</p>
           <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="company" novalidate>
             <input type="hidden" name="form-name" value="waitlist">
             <input type="hidden" name="source" id="source" value="">
@@ -469,14 +469,14 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
               </div>
             </fieldset>
 
-            <button type="submit" id="submit">Join the waitlist</button>
-            <p class="fine">We'll only email you about Yami's launch. No spam, and you can opt out anytime.</p>
+            <button type="submit" id="submit">send me the list</button>
+            <p class="fine">We'll only email you about Yami. No spam, and you can opt out anytime.</p>
           </form>
         </div>
         <div class="thanks" id="thanks" hidden>
           <img src="yami-trojan.svg" alt="">
-          <h2>you're on the list!</h2>
-          <p class="sub">We'll email your USC address before launch, with the top 5 list. Fight On!</p>
+          <h2>it's on the way!</h2>
+          <p class="sub">We'll send the top 5 list to your USC email soon. In the meantime, <a href="#get">put Yami on your home screen</a>. Fight On!</p>
           <button class="share" type="button" id="share">send it to the group chat &rarr;</button>
           <p class="share-done" id="share-done" aria-live="polite"></p>
         </div>
@@ -529,7 +529,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       })
       .catch(function () {
         submit.disabled = false;
-        submit.textContent = 'Join the waitlist';
+        submit.textContent = 'send me the list';
         showError("That didn't go through. Check your connection and try again.");
       });
   });
@@ -584,7 +584,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   var shareUrl = location.origin + location.pathname + '?utm_source=friend&utm_campaign=waitlist';
   document.getElementById('share').addEventListener('click', function () {
     var done = document.getElementById('share-done');
-    var data = { title: 'Yami', text: 'Snap your plate, get one easy tip. USC only waitlist:', url: shareUrl };
+    var data = { title: 'Yami', text: 'Snap your plate, get one easy tip. Free for USC students:', url: shareUrl };
     if (navigator.share) { navigator.share(data).catch(function () {}); return; }
     navigator.clipboard.writeText(shareUrl).then(function () { done.textContent = 'Link copied. Paste it in the chat!'; }, function () { done.textContent = shareUrl; });
   });
