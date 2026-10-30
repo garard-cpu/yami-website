@@ -206,6 +206,14 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
 
 /* Share after joining */
 .share { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; border: var(--line); background: var(--pink); color: var(--ink); font: 800 16px/1 var(--display); text-transform: lowercase; padding: 14px 22px; border-radius: 999px; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); }
+.join { text-align: center; }
+.join .sub { max-width: 46ch; margin-left: auto; margin-right: auto; }
+.join-mascot { width: 110px; height: auto; margin: -70px auto 6px; display: block; transform: rotate(-6deg); filter: drop-shadow(3px 3px 0 var(--ink)); }
+.join-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; }
+.join-actions .cta { background: var(--cardinal); color: #fff; }
+.join-actions .cta:hover { color: var(--ink); }
+.join-actions .share { margin-top: 0; }
+.join .fine { margin-top: 18px; }
 .share-done { font-size: 14px; color: var(--muted); min-height: 1.4em; }
 
 /* Get the app: install steps per phone */
@@ -250,7 +258,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       <span class="sticker">built at usc, for usc</span>
       <h1>eating well at usc, but make it <span class="hl">easy.</span></h1>
       <p class="lede">Snap your plate at the Village, Parkside or anywhere near campus. Yami tells you what's on it and the one thing to add next. No calorie math. No guilt.</p>
-      <a class="cta" href="#get">get the app, free &rarr;</a><a class="alt" href="#join">or get the top 5 meals list</a>
+      <a class="cta" href="#get">get the app, free &rarr;</a>
       <ul class="halls" aria-label="Where Yami works">
         <li>the village</li><li>parkside</li><li>starbucks</li><li>chipotle</li><li>grocery runs</li>
       </ul>
@@ -391,26 +399,6 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
 
   <section style="padding-top: 0">
     <div class="wrap">
-      <div class="only">
-        <span class="sticker lock">🔒 usc only</span>
-        <div>
-          <span class="sticker">only on yami</span>
-          <h2>the top 5 protein-packed, budget-friendly meals at usc.</h2>
-          <p style="color:#ffe1db;margin:14px 0 0">Drop your USC email and we'll send you the list.</p>
-        </div>
-        <ol aria-label="Preview of the list, revealed when you join">
-          <li class="blur"><span>Dining hall pick, revealed soon</span></li>
-          <li class="blur"><span>Village spot, revealed soon</span></li>
-          <li class="blur"><span>Coffee run swap, revealed soon</span></li>
-          <li class="blur"><span>Late-night option, revealed soon</span></li>
-          <li class="blur"><span>Grocery hack, revealed soon</span></li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding-top: 0">
-    <div class="wrap">
       <div class="section-head">
         <span class="sticker">real questions</span>
         <h2>ok but...</h2>
@@ -418,9 +406,8 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
       <div class="faq">
         <details><summary>is this a calorie counter?</summary><p>No. Yami looks at what's on your plate and suggests one easy add or swap. If you ever want numbers, they're there, but they're not the point.</p></details>
         <details><summary>is it actually from usc?</summary><p>It's built by USC students, but it's a student project. It's not official and not endorsed by the university.</p></details>
-        <details><summary>when can i use it?</summary><p>Right now. Add Yami to your home screen with the steps above. It's an early version we're testing with USC students, so tell us what's off. Drop your USC email below to get the top 5 meals list and updates.</p></details>
+        <details><summary>when can i use it?</summary><p>Right now. Add Yami to your home screen with the steps above. It's an early version we're testing with USC students, so tell us what's off.</p></details>
         <details><summary>do i need an account?</summary><p>Not yet. Your profile is saved on your phone, so open Yami from the home screen icon each time. If you delete the icon or clear Safari data, you'll set it up again.</p></details>
-        <details><summary>what happens to my email?</summary><p>We only use it to tell you when Yami is ready. No spam, and you can opt out anytime.</p></details>
       </div>
     </div>
   </section>
@@ -428,58 +415,15 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   <section id="join">
     <div class="wrap">
       <div class="join">
-        <div id="join-form">
-          <h2>get the top 5 list.</h2>
-          <p class="sub">The top 5 protein-packed, budget-friendly meals at USC, plus a heads-up when Yami adds something new. Use your @usc.edu email.</p>
-          <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="company" novalidate>
-            <input type="hidden" name="form-name" value="waitlist">
-            <input type="hidden" name="source" id="source" value="">
-            <p class="hidden-field"><label>Leave this empty <input name="company" id="company"></label></p>
-
-            <label class="field" for="email">USC email
-              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="tommy@usc.edu" required>
-            </label>
-            <p class="error" id="email-error" hidden></p>
-
-            <fieldset>
-              <legend>Where do you eat most? <small>(pick any)</small></legend>
-              <div class="chips">
-                <label class="chip"><input type="checkbox" name="eats" value="Village Dining Hall" id="eats-village"><span>The Village</span></label>
-                <label class="chip"><input type="checkbox" name="eats" value="Parkside" id="eats-parkside"><span>Parkside</span></label>
-                <label class="chip"><input type="checkbox" name="eats" value="Restaurants near campus" id="eats-restaurants"><span>Restaurants near campus</span></label>
-                <label class="chip"><input type="checkbox" name="eats" value="I cook" id="eats-cook"><span>I cook</span></label>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend>What would you use most? <small>(pick any)</small></legend>
-              <div class="chips">
-                <label class="chip"><input type="checkbox" name="wants" value="Snap a Meal" id="wants-snap"><span>Snap a Meal</span></label>
-                <label class="chip"><input type="checkbox" name="wants" value="Order Smart" id="wants-order"><span>Order Smart</span></label>
-                <label class="chip"><input type="checkbox" name="wants" value="Smart Grocery Cart" id="wants-cart"><span>Smart Grocery Cart</span></label>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend>Would you pay for Yami?</legend>
-              <div class="chips">
-                <label class="chip"><input type="radio" name="pay" value="Free only" id="pay-free"><span>Only if it's free</span></label>
-                <label class="chip"><input type="radio" name="pay" value="$4/month" id="pay-4"><span>$4 a month</span></label>
-                <label class="chip"><input type="radio" name="pay" value="$9/month" id="pay-9"><span>$9 a month</span></label>
-              </div>
-            </fieldset>
-
-            <button type="submit" id="submit">send me the list</button>
-            <p class="fine">We'll only email you about Yami. No spam, and you can opt out anytime.</p>
-          </form>
+        <img src="yami-trojan.svg" alt="" width="110" height="121" class="join-mascot">
+        <h2>yami's ready when you are.</h2>
+        <p class="sub">Free for USC students. Put it on your home screen, snap your next meal, and see what Yami says. Takes about 10 seconds.</p>
+        <div class="join-actions">
+          <a class="cta" href="app/?utm_source=website">join yami now &rarr;</a>
+          <button class="share" type="button" id="share">send to the group chat</button>
         </div>
-        <div class="thanks" id="thanks" hidden>
-          <img src="yami-trojan.svg" alt="">
-          <h2>it's on the way!</h2>
-          <p class="sub">We'll send the top 5 list to your USC email soon. In the meantime, <a href="#get">put Yami on your home screen</a>. Fight On!</p>
-          <button class="share" type="button" id="share">send it to the group chat &rarr;</button>
-          <p class="share-done" id="share-done" aria-live="polite"></p>
-        </div>
+        <p class="share-done" id="share-done" aria-live="polite"></p>
+        <p class="fine">Not on your phone? Open <b>yami-usc.netlify.app/app</b> there, or <a href="#get">see the steps</a>.</p>
       </div>
     </div>
   </section>
@@ -494,47 +438,6 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   </div>
 </footer>
 
-<script>
-(function () {
-  // Remember where the visitor came from (e.g. ?utm_source=instagram&utm_campaign=launch) so sign-ups can be traced to the ad.
-  var params = new URLSearchParams(window.location.search);
-  var source = [params.get('utm_source'), params.get('utm_campaign'), params.get('utm_content')].filter(Boolean).join(' / ');
-  document.getElementById('source').value = source || 'direct';
-
-  var form = document.querySelector('form[name="waitlist"]');
-  var email = document.getElementById('email');
-  var error = document.getElementById('email-error');
-  var submit = document.getElementById('submit');
-
-  function showError(text) {
-    error.textContent = text;
-    error.hidden = !text;
-  }
-  email.addEventListener('input', function () { showError(''); });
-
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    var value = email.value.trim().toLowerCase();
-    if (!value) return showError('Enter your USC email.');
-    if (!/^[^\s@]+@usc\.edu$/.test(value)) return showError('Use your @usc.edu email so we can open Yami to USC first.');
-    email.value = value;
-    submit.disabled = true;
-    submit.textContent = 'Joining…';
-    var body = new URLSearchParams(new FormData(form)).toString();
-    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
-      .then(function (response) {
-        if (!response.ok) throw new Error(String(response.status));
-        document.getElementById('join-form').hidden = true;
-        document.getElementById('thanks').hidden = false;
-      })
-      .catch(function () {
-        submit.disabled = false;
-        submit.textContent = 'send me the list';
-        showError("That didn't go through. Check your connection and try again.");
-      });
-  });
-})();
-</script>
 <script>
 (function () {
   // Try-it demo: canned sample reactions, no network.
@@ -581,7 +484,7 @@ footer b { font: 900 18px/1 var(--display); color: var(--cardinal); letter-spaci
   }
 
   // Share after joining, tagged so friend sign-ups show up as their own source.
-  var shareUrl = location.origin + location.pathname + '?utm_source=friend&utm_campaign=waitlist';
+  var shareUrl = location.origin + '/?utm_source=friend';
   document.getElementById('share').addEventListener('click', function () {
     var done = document.getElementById('share-done');
     var data = { title: 'Yami', text: 'Snap your plate, get one easy tip. Free for USC students:', url: shareUrl };
