@@ -141,6 +141,18 @@ async function pushDoc() {
   if (ok && !Object.keys(pending).length) del("yami-dirty");
 }
 
+// The team's sign-up list (app/users.html) reads only directory/{uid}, never profiles or meals.
+async function pushDirectory(isNew) {
+  const upd = get("yami-updates");
+  const ok = await safe(() => api.saveDirectory(user.uid, {
+    email: user.email || "",
+    lastActive: Date.now(),
+    ...(upd !== null && { updates: upd === "1" }),
+    ...(isNew && { joinedAt: Date.now() }),
+  }));
+  if (ok) del("yami-updates");
+}
+
 let sent = new Map(); // meal id -> JSON last saved to the cloud
 async function pushMeals(list) {
   const next = new Map(list.filter((m) => m && m.at).map((m) => [String(m.at), JSON.stringify(m)]));
@@ -197,6 +209,7 @@ async function hydrate(u) {
     const board = get("yami-board");
     if (board) await queue(() => safe(() => api.saveBoard(u.uid, board)));
   }
+  await pushDirectory(!cloud);
   set("yami-uid", u.uid);
   del("yami-dirty");
   boot();
@@ -256,6 +269,7 @@ async function firebaseApi() {
     saveMeal: (uid, id, json) => F.setDoc(meal(uid, id), { json, at: Number(id) || 0 }),
     deleteMeal: (uid, id) => F.deleteDoc(meal(uid, id)),
     saveBoard: (uid, json) => F.setDoc(board(uid), { json }),
+    saveDirectory: (uid, data) => F.setDoc(F.doc(db, "directory", uid), data, { merge: true }),
   };
 }
 
@@ -298,6 +312,7 @@ function fakeApi() {
     async saveMeal(uid, id, json) { doc(uid).meals[id] = json; save(); },
     async deleteMeal(uid, id) { delete doc(uid).meals[id]; save(); },
     async saveBoard(uid, json) { doc(uid).board = json; save(); },
+    async saveDirectory(uid, data) { (db.directory ||= {})[uid] = { ...db.directory[uid], ...data }; save(); },
   };
 }
 
@@ -327,6 +342,8 @@ const CSS = `
 #yacct .sso{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;border:2.5px solid #160909;background:#fff;color:#160909;box-shadow:3px 3px 0 #160909;cursor:pointer}
 #yacct .sso.apple{background:#160909;color:#fff}
 #yacct .sso svg{width:20px;height:20px}
+#yacct .opt{flex-direction:row;align-items:center;gap:10px;font-weight:600;font-size:15px;min-height:44px;cursor:pointer}
+#yacct .opt input{width:22px;height:22px;min-height:0;margin:0;padding:0;accent-color:#990000}
 #yacct .or{display:flex;align-items:center;gap:10px;color:#5e4744;font-size:14px}
 #yacct .or:before,#yacct .or:after{content:"";flex:1;height:1.5px;background:#ead6d0}
 #yacct form{display:flex;flex-direction:column;gap:10px}
@@ -382,6 +399,7 @@ function showSignIn(mode = "up", note = "") {
     <img src="/app/icon-192.png" alt="">
     <h1>${up ? "save your yami." : "welcome back."}</h1>
     <p>${up ? "Make a free account so your profile and meals are saved, even on a new phone." : "Sign in to pick up where you left off."}</p>
+    ${up ? '<label class="opt"><input type="checkbox" name="updates" checked> Send me Yami updates by email</label>' : ""}
     ${cfg.apple || fake ? `<button class="sso apple" type="button" data-p="apple">${APPLE}Continue with Apple</button>` : ""}
     ${cfg.google !== false || fake ? `<button class="sso" type="button" data-p="google">${GOOGLE}Continue with Google</button>` : ""}
     <div class="or">or use email</div>
@@ -409,6 +427,9 @@ function showSignIn(mode = "up", note = "") {
     console.warn(e);
   };
 
+  const opt = el.querySelector('[name="updates"]');
+  const remember = () => (opt ? set("yami-updates", opt.checked ? "1" : "0") : del("yami-updates"));
+
   form.onsubmit = async (ev) => {
     ev.preventDefault();
     const email = form.email.value.trim();
@@ -417,11 +438,13 @@ function showSignIn(mode = "up", note = "") {
     if (!email) return (errEl.textContent = "Type your email.");
     if (!pw) return (errEl.textContent = "Type a password.");
     busy(true);
+    remember();
     try { await (up ? api.signUp(email, pw) : api.signIn(email, pw)); } catch (e) { fail(e); }
   };
   el.querySelectorAll(".sso").forEach((b) => (b.onclick = async () => {
     errEl.textContent = okEl.textContent = "";
     busy(true);
+    remember();
     try { await api[b.dataset.p](); } catch (e) { fail(e); }
   }));
   el.querySelector('[data-a="switch"]').onclick = () => showSignIn(up ? "in" : "up");

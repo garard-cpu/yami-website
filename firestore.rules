@@ -1,11 +1,24 @@
 rules_version = '2';
 
-// Each person can read and write only their own Yami data:
-// users/{uid}, users/{uid}/meals/{id} and users/{uid}/extra/board.
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Team members who can see the sign-up list: add a doc to "admins" whose ID is their
+    // email (Firebase console > Firestore > Start collection "admins"). Sign in with Google.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+
+    // Each person can read and write only their own Yami data:
+    // users/{uid}, users/{uid}/meals/{id} and users/{uid}/extra/board.
     match /users/{uid}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // The sign-up list: email, join date, last active, email-updates choice. No profiles or meals.
+    match /directory/{uid} {
+      allow write: if request.auth != null && request.auth.uid == uid;
+      allow read: if (request.auth != null && request.auth.uid == uid) || isAdmin();
     }
   }
 }
