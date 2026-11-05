@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Yami sign-ups</title>
+<link rel="icon" type="image/png" href="/app/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root { --c:#990000; --ink:#160909; --mu:#5e4744; --ln:#ead6d0; --bg:#fff7f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Instrument Sans", "Helvetica Neue", system-ui, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-family: "Unbounded", "Arial Black", system-ui, sans-serif; font-size: 28px; margin: 0 0 6px; }
+  p { color: var(--mu); margin: 0 0 18px; line-height: 1.45; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0; }
+  .stat { background: #fff; border: 2.5px solid var(--ink); border-radius: 18px; box-shadow: 4px 4px 0 var(--ink); padding: 14px 16px; }
+  .stat b { display: block; font-family: "Unbounded", system-ui, sans-serif; font-size: 30px; }
+  .stat span { color: var(--mu); font-weight: 700; font-size: 14px; }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 10px 0 14px; }
+  button { font: inherit; font-weight: 700; border: 2.5px solid var(--ink); border-radius: 999px; padding: 10px 18px; min-height: 44px; background: #fff; color: var(--ink); cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+  button.go { background: var(--c); color: #fff; }
+  label { display: flex; gap: 8px; align-items: center; font-weight: 700; min-height: 44px; }
+  input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--c); }
+  .wrap { overflow-x: auto; background: #fff; border: 2px solid var(--ln); border-radius: 16px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--ln); white-space: nowrap; }
+  th { font-size: 13px; color: var(--mu); text-transform: uppercase; letter-spacing: .04em; }
+  tr:last-child td { border-bottom: 0; }
+  .yes { color: #2c6e2f; font-weight: 700; }
+  .err { color: var(--c); font-weight: 700; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>yami sign-ups</h1>
+  <p id="sub">For the Yami team only. Sign in with the Google account listed in Firestore's "admins" collection.</p>
+
+  <div id="signin" hidden><button class="go" type="button" id="google">Sign in with Google</button></div>
+  <p class="err" id="err" role="alert" hidden></p>
+
+  <section id="list" hidden>
+    <div class="stats">
+      <div class="stat"><b id="n-all">0</b><span>accounts</span></div>
+      <div class="stat"><b id="n-week">0</b><span>joined this week</span></div>
+      <div class="stat"><b id="n-active">0</b><span>active this week</span></div>
+      <div class="stat"><b id="n-opt">0</b><span>want email updates</span></div>
+    </div>
+    <div class="bar">
+      <button type="button" id="csv">Download spreadsheet (CSV)</button>
+      <label><input type="checkbox" id="only-opt"> Only people who want updates</label>
+      <button type="button" id="out">Sign out</button>
+    </div>
+    <div class="wrap"><table>
+      <thead><tr><th>Email</th><th>Joined</th><th>Last active</th><th>Email updates</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+</main>
+
+<script src="/app/firebase-config.js"></script>
+<script type="module">
+const cfg = window.YAMI_FIREBASE || {};
+const fake = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).has("fakeauth");
+const $ = (id) => document.getElementById(id);
+const WEEK = 7 * 864e5;
+let people = [];
+
+const day = (ms) => (ms ? new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "");
+const showErr = (msg) => { $("err").textContent = msg; $("err").hidden = false; };
+
+function render() {
+  const now = Date.now();
+  const only = $("only-opt").checked;
+  const shown = people.filter((p) => !only || p.updates);
+  $("n-all").textContent = people.length;
+  $("n-week").textContent = people.filter((p) => now - (p.joinedAt || 0) < WEEK).length;
+  $("n-active").textContent = people.filter((p) => now - (p.lastActive || 0) < WEEK).length;
+  $("n-opt").textContent = people.filter((p) => p.updates).length;
+  const rows = $("rows");
+  rows.textContent = "";
+  for (const p of shown) {
+    const tr = document.createElement("tr");
+    [p.email || "(no email)", day(p.joinedAt), day(p.lastActive), p.updates ? "Yes" : p.updates === false ? "No" : ""].forEach((v, i) => {
+      const td = document.createElement("td");
+      td.textContent = v;
+      if (i === 3 && p.updates) td.className = "yes";
+      tr.appendChild(td);
+    });
+    rows.appendChild(tr);
+  }
+  $("list").hidden = false;
+}
+
+function csv() {
+  const only = $("only-opt").checked;
+  const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [["email", "joined", "last_active", "email_updates"].join(",")];
+  for (const p of people.filter((p) => !only || p.updates)) {
+    lines.push([p.email, day(p.joinedAt), day(p.lastActive), p.updates ? "yes" : p.updates === false ? "no" : ""].map(cell).join(","));
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+  a.download = `yami-signups-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+}
+
+$("only-opt").onchange = render;
+$("csv").onclick = csv;
+
+async function main() {
+  if (fake) {
+    const db = JSON.parse(localStorage.getItem("yami-fake-db") || "{}");
+    people = Object.values(db.directory || {}).sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
+    $("out").onclick = () => {};
+    return render();
+  }
+  if (!cfg.apiKey) {
+    $("sub").textContent = "Accounts aren't turned on yet. Add the Firebase settings to app/firebase-config.js first.";
+    return;
+  }
+  const base = "https://www.gstatic.com/firebasejs/11.0.2/";
+  const [{ initializeApp }, A, F] = await Promise.all([
+    import(base + "firebase-app.js"), import(base + "firebase-auth.js"), import(base + "firebase-firestore.js"),
+  ]);
+  const app = initializeApp({ apiKey: cfg.apiKey, authDomain: cfg.authDomain, projectId: cfg.projectId, appId: cfg.appId });
+  const auth = A.getAuth(app);
+  const db = F.getFirestore(app);
+  $("google").onclick = () => A.signInWithPopup(auth, new A.GoogleAuthProvider()).catch((e) => showErr(e.message));
+  $("out").onclick = () => A.signOut(auth);
+  A.onAuthStateChanged(auth, async (u) => {
+    $("err").hidden = true;
+    $("list").hidden = true;
+    $("signin").hidden = !!u;
+    if (!u) return;
+    try {
+      const snap = await F.getDocs(F.collection(db, "directory"));
+      people = snap.docs.map((d) => d.data()).sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
+      render();
+    } catch (e) {
+      showErr(e.code === "permission-denied"
+        ? `${u.email} isn't on the team list. Add a doc with that email as its ID to the "admins" collection in Firestore.`
+        : "Couldn't load the list. " + e.message);
+    }
+  });
+}
+main().catch((e) => showErr("Couldn't load. " + e.message));
+</script>
+</body>
+</html>
