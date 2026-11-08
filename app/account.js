@@ -6,14 +6,19 @@
 // Edits to Saf's export (app/index.html), to redo when a new export replaces it:
 // 1. Before the bundle: <script src="/app/firebase-config.js">, <script type="module" src="/app/account.js">
 //    and the 8-second fallback starter; the bundle's own tag becomes <script type="text/yami-app" id="yami-app">.
-// 2. In the provider: meals ([v,z]) and board ([I,k]) start from localStorage "yami-meals" / "yami-board".
-// 3. After the "yami-proto" save effect: two effects that call window.__yamiSave("meals", v) and ("board", I).
+// 2. In the provider: meals ([v,z]) and board ([I,k]) start from localStorage "yami-meals" / "yami-board"
+//    (meals fall back to the app's own c.meals from "yami-proto").
+// 3. After the "yami-proto" save effect (deps [d,N,v]): two effects that call window.__yamiSave("meals", v) and ("board", I).
 // 4. On Profile, before "Yami offers general guidance": r.jsx("div",{id:"yami-account"}).
 
 window.__yamiAcct = true;
 
-const KEYS = ["yami-proto", "yami-ob3", "yami-fuel"]; // the app writes these itself
-const LOCAL = [...KEYS, "yami-meals", "yami-board", "yami-uid", "yami-dirty"];
+// Saved per account as strings in users/{uid}.extras (the app writes these itself; badges, food-name fixes, usual foods).
+const EXTRA = ["yami-badges", "yami-fixes", "yami-usuals"];
+const KEYS = ["yami-proto", "yami-ob3", "yami-fuel", ...EXTRA];
+// Per-phone flags (tours already seen): not synced, but cleared on sign-out so the next person starts fresh.
+const DEVICE = ["yami-motw", "yami-ostour", "yami-tour-groc"];
+const LOCAL = [...KEYS, ...DEVICE, "yami-meals", "yami-board", "yami-uid", "yami-dirty"];
 const cfg = window.YAMI_FIREBASE || {};
 const qs = new URLSearchParams(location.search);
 const fake = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && qs.has("fakeauth");
@@ -128,14 +133,32 @@ async function safe(fn) {
   try { await fn(); return true; } catch (e) { failed = true; console.warn("Yami could not save to the cloud yet", e); return false; }
 }
 
+// The app also keeps recent meals inside "yami-proto"; they sync one doc each (pushMeals),
+// so the profile doc leaves them out and stays well under Firestore's 1 MB limit.
+function protoForCloud() {
+  const raw = get("yami-proto");
+  const p = parse(raw, null);
+  if (!p || !p.meals) return raw || "";
+  const { meals, ...rest } = p;
+  return JSON.stringify(rest);
+}
+// Meals saved before signing in may live only inside "yami-proto".
+function localMeals() {
+  const m = parse(get("yami-meals"), null);
+  if (Array.isArray(m)) return m;
+  const p = parse(get("yami-proto"), null);
+  return Array.isArray(p?.meals) ? p.meals : [];
+}
+
 async function pushDoc() {
   docTimer = 0;
   if (!user) return;
   failed = false;
   const ok = await safe(() => api.saveDoc(user.uid, {
-    proto: get("yami-proto") || "",
+    proto: protoForCloud(),
     ob3: get("yami-ob3") === "1",
     fuel: get("yami-fuel") || "",
+    extras: Object.fromEntries(EXTRA.map((k) => [k, get(k) || ""])),
     email: user.email || "",
   }));
   if (ok && !Object.keys(pending).length) del("yami-dirty");
@@ -169,7 +192,7 @@ async function pushMeals(list) {
 
 addEventListener("pagehide", flushAll);
 document.addEventListener("visibilitychange", () => document.visibilityState === "hidden" && flushAll());
-addEventListener("online", () => user && (queue(pushDoc), queue(() => pushMeals(parse(get("yami-meals"), [])))));
+addEventListener("online", () => user && (queue(pushDoc), queue(() => pushMeals(localMeals()))));
 
 // ---------- loading a signed-in person's data before the app starts ----------
 
@@ -196,6 +219,8 @@ async function hydrate(u) {
     cloud.proto ? set("yami-proto", cloud.proto) : del("yami-proto");
     cloud.ob3 ? set("yami-ob3", "1") : del("yami-ob3");
     cloud.fuel ? set("yami-fuel", cloud.fuel) : del("yami-fuel");
+    for (const k of EXTRA) cloud.extras?.[k] ? set(k, cloud.extras[k]) : del(k);
+    for (const k of DEVICE) del(k);
     const meals = (cloud.meals || []).map((j) => parse(j, null)).filter(Boolean).sort((a, b) => (a.at || 0) - (b.at || 0));
     putList("yami-meals", meals);
     cloud.board ? set("yami-board", cloud.board) : del("yami-board");
@@ -205,7 +230,7 @@ async function hydrate(u) {
     sent = new Map((cloud?.meals || []).map((j) => { const m = parse(j, null); return m && [String(m.at), j]; }).filter(Boolean));
     // Upload what this phone has (first sign-in after using Yami without an account, or unsaved changes).
     await queue(pushDoc);
-    await queue(() => pushMeals(parse(get("yami-meals"), [])));
+    await queue(() => pushMeals(localMeals()));
     const board = get("yami-board");
     if (board) await queue(() => safe(() => api.saveBoard(u.uid, board)));
   }
