@@ -14,6 +14,8 @@ const PROMPT = `You read meal photos for Yami, a nutrition app for USC students.
 
 List every distinct food or drink you can see, as the person would name it. Split plates into components: a burrito bowl is rice, beans, chicken, salsa, and so on; a dining hall plate is each item on it. Sauces and dressings count when visible. Skip plates, cups, utensils, and packaging.
 
+Drinks matter: name exactly what it looks like so Yami can track caffeine ("Drip coffee", "Iced americano", "Cold brew", "Iced latte", "Espresso", "Iced matcha latte", "Chai latte", "Boba milk tea", "Green tea", "Red Bull", "Celsius"). A green milky drink is a matcha latte. Read labels and logos on cans and cups.
+
 For each item:
 - name: short and natural, in title case ("Cilantro-lime rice", "Grilled chicken", "Iced latte"). Use the chain's own menu name when the place is a chain.
 - usda: a plain generic phrase USDA FoodData Central would know ("rice white cooked", "chicken breast grilled", "coffee latte with milk", "black beans"). Never a brand name.
