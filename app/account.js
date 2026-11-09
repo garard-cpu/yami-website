@@ -17,7 +17,7 @@ window.__yamiAcct = true;
 const EXTRA = ["yami-badges", "yami-fixes", "yami-usuals"];
 const KEYS = ["yami-proto", "yami-ob3", "yami-fuel", ...EXTRA];
 // Per-phone flags (tours already seen): not synced, but cleared on sign-out so the next person starts fresh.
-const DEVICE = ["yami-motw", "yami-ostour", "yami-tour-groc"];
+const DEVICE = ["yami-motw", "yami-ostour", "yami-tour-groc", "yami-demo"];
 const LOCAL = [...KEYS, ...DEVICE, "yami-meals", "yami-board", "yami-uid", "yami-dirty"];
 const cfg = window.YAMI_FIREBASE || {};
 const qs = new URLSearchParams(location.search);
