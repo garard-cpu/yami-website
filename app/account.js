@@ -14,10 +14,10 @@
 window.__yamiAcct = true;
 
 // Saved per account as strings in users/{uid}.extras (the app writes these itself; badges, food-name fixes, usual foods).
-const EXTRA = ["yami-badges", "yami-fixes", "yami-usuals"];
+const EXTRA = ["yami-badges", "yami-fixes", "yami-usuals", "yami-groc-log", "yami-meal-recs"];
 const KEYS = ["yami-proto", "yami-ob3", "yami-fuel", ...EXTRA];
 // Per-phone flags (tours already seen): not synced, but cleared on sign-out so the next person starts fresh.
-const DEVICE = ["yami-motw", "yami-ostour", "yami-tour-groc", "yami-demo"];
+const DEVICE = ["yami-motw", "yami-ostour", "yami-tour-groc", "yami-demo", "yami-os-zone"];
 const LOCAL = [...KEYS, ...DEVICE, "yami-meals", "yami-board", "yami-uid", "yami-dirty"];
 const cfg = window.YAMI_FIREBASE || {};
 const qs = new URLSearchParams(location.search);
