@@ -6,8 +6,9 @@
 const BASE = process.env.INSTACART_BASE_URL || "https://connect.instacart.com";
 
 export default async (req) => {
-  if (req.method !== "POST") return Response.json({ error: "Use POST" }, { status: 405 });
   const key = process.env.INSTACART_API_KEY;
+  if (req.method === "GET") return Response.json({ configured: !!key });
+  if (req.method !== "POST") return Response.json({ error: "Use POST" }, { status: 405 });
   if (!key) return Response.json({ error: "not_configured" }, { status: 501 });
 
   let body;
