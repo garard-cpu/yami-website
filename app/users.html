@@ -59,6 +59,18 @@
       <thead><tr><th>Email</th><th>Joined</th><th>Last active</th><th>Email updates</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
+
+    <h1 style="margin-top:36px">waitlist</h1>
+    <p>Emails from the homepage sign-up form.</p>
+    <div class="stats">
+      <div class="stat"><b id="w-all">0</b><span>on the waitlist</span></div>
+      <div class="stat"><b id="w-week">0</b><span>joined this week</span></div>
+    </div>
+    <div class="bar"><button type="button" id="wcsv">Download waitlist (CSV)</button></div>
+    <div class="wrap"><table>
+      <thead><tr><th>Email</th><th>Joined</th><th>From</th></tr></thead>
+      <tbody id="wrows"></tbody>
+    </table></div>
   </section>
 </main>
 
@@ -69,6 +81,7 @@ const fake = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSear
 const $ = (id) => document.getElementById(id);
 const WEEK = 7 * 864e5;
 let people = [];
+let waitlist = [];
 
 const day = (ms) => (ms ? new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "");
 const showErr = (msg) => { $("err").textContent = msg; $("err").hidden = false; };
@@ -93,7 +106,26 @@ function render() {
     });
     rows.appendChild(tr);
   }
+  const wrows = $("wrows");
+  wrows.textContent = "";
+  $("w-all").textContent = waitlist.length;
+  $("w-week").textContent = waitlist.filter((w) => now - (w.at || 0) < WEEK).length;
+  for (const w of waitlist) {
+    const tr = document.createElement("tr");
+    [w.email, day(w.at), w.source || ""].forEach((v) => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
+    wrows.appendChild(tr);
+  }
   $("list").hidden = false;
+}
+
+function wcsv() {
+  const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [["email", "joined", "from"].join(",")];
+  for (const w of waitlist) lines.push([w.email, day(w.at), w.source].map(cell).join(","));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+  a.download = `yami-waitlist-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
 }
 
 function csv() {
@@ -111,6 +143,7 @@ function csv() {
 
 $("only-opt").onchange = render;
 $("csv").onclick = csv;
+$("wcsv").onclick = wcsv;
 
 async function main() {
   if (fake) {
@@ -140,6 +173,11 @@ async function main() {
     try {
       const snap = await F.getDocs(F.collection(db, "directory"));
       people = snap.docs.map((d) => d.data()).sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
+      try {
+        const ws = await F.getDocs(F.collection(db, "waitlist"));
+        waitlist = ws.docs.map((d) => { const w = d.data(); return { ...w, at: w.at && w.at.toMillis ? w.at.toMillis() : 0 }; })
+          .sort((a, b) => b.at - a.at);
+      } catch { waitlist = []; }
       render();
     } catch (e) {
       showErr(e.code === "permission-denied"
