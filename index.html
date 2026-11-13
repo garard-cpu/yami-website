@@ -349,8 +349,15 @@ html,body{overflow-x:clip}
       </div>
       <h1>meet yami.<br><span>eat well at usc.</span></h1>
       <p class="lead">Your AI nutritionist that scrapes all the menus on campus to help you eat better, and also creates your grocery list.</p>
-      <div class="signup"><a class="btn red" href="/app/">open yami</a></div>
-      <p class="fine">Free for USC students. Works on any phone.</p>
+      <form class="signup" data-signup data-src="top of page" name="waitlist" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="waitlist">
+        <input type="hidden" name="source" value="top of page">
+        <label class="sr" for="em1">Your email</label>
+        <input id="em1" type="email" name="email" placeholder="you@usc.edu" autocomplete="email" required>
+        <button class="btn red" type="submit">join the beta</button>
+      </form>
+      <p class="fine">Free for USC students. We only email about Yami.</p>
+      <p class="done-note">You're in. Open the app below and start with your first plate.</p>
     </div>
     <div class="hero-vis">
     <div class="duo" aria-label="Yami scanning a C&amp;G açaí bowl and breaking down its nutrients">
@@ -521,7 +528,7 @@ html,body{overflow-x:clip}
   <div class="wrap">
     <div class="sec-h"><span class="eyebrow">questions</span><h2>frequently asked.</h2></div>
     <div class="faq">
-      <details><summary>is yami free?</summary><p>Yes. Yami is free for USC students.</p></details>
+      <details><summary>is yami free?</summary><p>Yes. The beta is free for USC students.</p></details>
       <details><summary>is it only for usc?</summary><p>For now, yes. Our menus and stores are the ones on and around USC's University Park campus.</p></details>
       <details><summary>do i have to count calories?</summary><p>No. Calories stay off unless you turn them on. Yami focuses on your goal: protein, fiber, greens and one habit a day.</p></details>
       <details><summary>how accurate is it?</summary><p>Campus and restaurant items use real menu nutrition, and groceries use nutrition labels. When Yami estimates something from a photo, it says so.</p></details>
@@ -535,8 +542,13 @@ html,body{overflow-x:clip}
     <div class="box">
       <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IllhbWksIGEgcm91bmQgY2FyZGluYWwgYnVubnkgd2VhcmluZyBhIGdvbGQgVHJvamFuIGhlbG1ldCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImZ1ciIgeDE9IjAiIHkxPSIwIiB4Mj0iLjYiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRDY0MDRBIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0EzMTIxQyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGRkUyN0EiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRURCMTJBIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJjcmVzdCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNDMjE4MjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjN0EwMDA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8IS0tIGVhcnMsIHBva2luZyB1cCB0aHJvdWdoIHRoZSB0b3Agb2YgdGhlIGhlbG1ldCAtLT4KICA8cGF0aCBkPSJNODAgNjZDODAgMzAgNzAgOCA1NCAxMGMtMTYgMy0xMiAzNCAxMCA1OHoiIGZpbGw9InVybCgjZnVyKSIvPgogIDxwYXRoIGQ9Ik03NSA2MkM3NSAzNiA2NyAyMiA1OCAyNGMtOSAyLTcgMjQgOSA0MHoiIGZpbGw9IiNGRkQ5QzkiLz4KICA8cGF0aCBkPSJNMTIwIDY2QzEyMCAzMCAxMzAgOCAxNDYgMTBjMTYgMyAxMiAzNC0xMCA1OHoiIGZpbGw9InVybCgjZnVyKSIvPgogIDxwYXRoIGQ9Ik0xMjUgNjJDMTI1IDM2IDEzMyAyMiAxNDIgMjRjOSAyIDcgMjQtOSA0MHoiIGZpbGw9IiNGRkQ5QzkiLz4KICA8IS0tIGJvZHkgLS0+CiAgPHBhdGggZD0iTTEwMCA2MmM0OCAwIDcyIDM0IDcyIDc0IDAgNDItMzAgNjgtNzIgNjhzLTcyLTI2LTcyLTY4YzAtNDAgMjQtNzQgNzItNzR6IiBmaWxsPSJ1cmwoI2Z1cikiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTc4IiByeD0iMzYiIHJ5PSIyNCIgZmlsbD0iI0ZGRjRFNiIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxNTAiIHJ4PSIyMCIgcnk9IjEzIiBmaWxsPSIjRkZGNEU2Ii8+CiAgPGVsbGlwc2UgY3g9IjYyIiBjeT0iMTUyIiByeD0iMTAiIHJ5PSI2LjUiIGZpbGw9IiNGRkIzQjMiIG9wYWNpdHk9Ii44Ii8+CiAgPGVsbGlwc2UgY3g9IjEzOCIgY3k9IjE1MiIgcng9IjEwIiByeT0iNi41IiBmaWxsPSIjRkZCM0IzIiBvcGFjaXR5PSIuOCIvPgogIDwhLS0gZXllcyAtLT4KICA8ZWxsaXBzZSBjeD0iNzgiIGN5PSIxMjgiIHJ4PSIxNSIgcnk9IjE3IiBmaWxsPSIjMkIxNDE0Ii8+CiAgPGVsbGlwc2UgY3g9Ijc4IiBjeT0iMTMxIiByeD0iMTAiIHJ5PSIxMSIgZmlsbD0iIzZCMkEyMiIvPgogIDxlbGxpcHNlIGN4PSI3OCIgY3k9IjEzMCIgcng9IjYiIHJ5PSI3IiBmaWxsPSIjMUUwRTBFIi8+CiAgPGNpcmNsZSBjeD0iODMiIGN5PSIxMjIiIHI9IjUiIGZpbGw9IiNmZmYiLz4KICA8Y2lyY2xlIGN4PSI3MyIgY3k9IjEzNCIgcj0iMi4yIiBmaWxsPSIjZmZmIi8+CiAgPGVsbGlwc2UgY3g9IjEyMiIgY3k9IjEyOCIgcng9IjE1IiByeT0iMTciIGZpbGw9IiMyQjE0MTQiLz4KICA8ZWxsaXBzZSBjeD0iMTIyIiBjeT0iMTMxIiByeD0iMTAiIHJ5PSIxMSIgZmlsbD0iIzZCMkEyMiIvPgogIDxlbGxpcHNlIGN4PSIxMjIiIGN5PSIxMzAiIHJ4PSI2IiByeT0iNyIgZmlsbD0iIzFFMEUwRSIvPgogIDxjaXJjbGUgY3g9IjEyNyIgY3k9IjEyMiIgcj0iNSIgZmlsbD0iI2ZmZiIvPgogIDxjaXJjbGUgY3g9IjExNyIgY3k9IjEzNCIgcj0iMi4yIiBmaWxsPSIjZmZmIi8+CiAgPCEtLSBub3NlIGFuZCBzbWlsZSAtLT4KICA8cGF0aCBkPSJNOTUgMTQ0cTUgNSAxMCAwcS01LTQtMTAgMHoiIGZpbGw9IiNGMjhGQTUiLz4KICA8cGF0aCBkPSJNOTIgMTU0cTggNyAxNiAwIiBzdHJva2U9IiMyQjE0MTQiIHN0cm9rZS13aWR0aD0iMy41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8IS0tIFRyb2phbiBoZWxtZXQsIHNoYXBlZCB0byB0aGUgaGVhZDogZG9tZSBkb3duIHRvIHRoZSBicm93LCBjaGVlayBndWFyZHMgYWxvbmcgdGhlIGZhY2UgLS0+CiAgPHBhdGggZD0iTTMwIDEyMEMyNCA3MCA1MiA1MiAxMDAgNTJTMTc2IDcwIDE3MCAxMjBMMTYwIDExOEMxNTYgMTEyIDE0NiAxMDYgMTM2IDEwNFExMDAgOTYgNjQgMTA0QzU0IDEwNiA0NCAxMTIgNDAgMTE4eiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxwYXRoIGQ9Ik0zMCAxMTZDMjggMTM2IDM0IDE1MiA0NiAxNjBDNTIgMTQ4IDUyIDEzMiA0NiAxMTZ6IiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPHBhdGggZD0iTTE3MCAxMTZDMTcyIDEzNiAxNjYgMTUyIDE1NCAxNjBDMTQ4IDE0OCAxNDggMTMyIDE1NCAxMTZ6IiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPHBhdGggZD0iTTQyIDExNFExMDAgOTIgMTU4IDExNCIgc3Ryb2tlPSIjRDM5NjFDIiBzdHJva2Utd2lkdGg9IjciIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik00OCA4NlE2NiA2NiA5MiA2MiIgc3Ryb2tlPSIjRkZGM0MyIiBzdHJva2Utd2lkdGg9IjYiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iLjgiLz4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjEyNiIgcj0iMy4yIiBmaWxsPSIjRDM5NjFDIi8+CiAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iMTI2IiByPSIzLjIiIGZpbGw9IiNEMzk2MUMiLz4KICA8IS0tIGNyZXN0OiBhIGJyaXN0bHkgYnJ1c2ggcnVubmluZyBmcm9udCB0byBiYWNrIG92ZXIgdGhlIHRvcCAtLT4KICA8cGF0aCBkPSJNODYgNTZDODQgMzIgOTIgMTQgMTA4IDEwQzEyOCA2IDE0NiAxOCAxNTAgMzZDMTQyIDMwIDEzMiAzMCAxMjQgMzRDMTE2IDM4IDExMiA0NiAxMTIgNTZ6IiBmaWxsPSJ1cmwoI2NyZXN0KSIvPgogIDxwYXRoIGQ9Ik05NCA1MGMwLTE0IDYtMjggMTgtMzRNMTA0IDUyYzItMTQgMTAtMjQgMjItMjZNMTE2IDQ2YzYtOCAxNi0xMCAyNi04IiBzdHJva2U9IiNFODU2NUUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9Ii43NSIvPgogIDxwYXRoIGQ9Ik04NCA1OFE5OCA1MCAxMTQgNTYiIHN0cm9rZT0iI0QzOTYxQyIgc3Ryb2tlLXdpZHRoPSI1IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==" alt="Yami, a round cardinal bunny wearing a gold Trojan helmet">
       <h2>your next plate starts here.</h2>
-      <p>Open Yami and it will help you eat well at USC, one plate at a time.</p>
-      <div class="signup"><a class="btn red" href="/app/">open yami</a></div>
+      <p>Join the beta and Yami will help you eat well at USC, one plate at a time.</p>
+      <form class="signup" data-signup data-src="bottom of page">
+        <label class="sr" for="em2">Your email</label>
+        <input id="em2" type="email" name="email" placeholder="you@usc.edu" autocomplete="email" required>
+        <button class="btn red" type="submit">join the beta</button>
+      </form>
+      <p class="done-note">You're in. Tap "get the app" to start.</p>
     </div>
   </div>
 </section>
@@ -556,6 +568,21 @@ html,body{overflow-x:clip}
   <button class="x" type="button" aria-label="Hide the get the app bar" id="getx">×</button>
 </div>
 
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+  <div class="sheet">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IllhbWksIGEgcm91bmQgY2FyZGluYWwgYnVubnkgd2VhcmluZyBhIGdvbGQgVHJvamFuIGhlbG1ldCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImZ1ciIgeDE9IjAiIHkxPSIwIiB4Mj0iLjYiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRDY0MDRBIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0EzMTIxQyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGRkUyN0EiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRURCMTJBIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJjcmVzdCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNDMjE4MjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjN0EwMDA4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8IS0tIGVhcnMsIHBva2luZyB1cCB0aHJvdWdoIHRoZSB0b3Agb2YgdGhlIGhlbG1ldCAtLT4KICA8cGF0aCBkPSJNODAgNjZDODAgMzAgNzAgOCA1NCAxMGMtMTYgMy0xMiAzNCAxMCA1OHoiIGZpbGw9InVybCgjZnVyKSIvPgogIDxwYXRoIGQ9Ik03NSA2MkM3NSAzNiA2NyAyMiA1OCAyNGMtOSAyLTcgMjQgOSA0MHoiIGZpbGw9IiNGRkQ5QzkiLz4KICA8cGF0aCBkPSJNMTIwIDY2QzEyMCAzMCAxMzAgOCAxNDYgMTBjMTYgMyAxMiAzNC0xMCA1OHoiIGZpbGw9InVybCgjZnVyKSIvPgogIDxwYXRoIGQ9Ik0xMjUgNjJDMTI1IDM2IDEzMyAyMiAxNDIgMjRjOSAyIDcgMjQtOSA0MHoiIGZpbGw9IiNGRkQ5QzkiLz4KICA8IS0tIGJvZHkgLS0+CiAgPHBhdGggZD0iTTEwMCA2MmM0OCAwIDcyIDM0IDcyIDc0IDAgNDItMzAgNjgtNzIgNjhzLTcyLTI2LTcyLTY4YzAtNDAgMjQtNzQgNzItNzR6IiBmaWxsPSJ1cmwoI2Z1cikiLz4KICA8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTc4IiByeD0iMzYiIHJ5PSIyNCIgZmlsbD0iI0ZGRjRFNiIvPgogIDxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxNTAiIHJ4PSIyMCIgcnk9IjEzIiBmaWxsPSIjRkZGNEU2Ii8+CiAgPGVsbGlwc2UgY3g9IjYyIiBjeT0iMTUyIiByeD0iMTAiIHJ5PSI2LjUiIGZpbGw9IiNGRkIzQjMiIG9wYWNpdHk9Ii44Ii8+CiAgPGVsbGlwc2UgY3g9IjEzOCIgY3k9IjE1MiIgcng9IjEwIiByeT0iNi41IiBmaWxsPSIjRkZCM0IzIiBvcGFjaXR5PSIuOCIvPgogIDwhLS0gZXllcyAtLT4KICA8ZWxsaXBzZSBjeD0iNzgiIGN5PSIxMjgiIHJ4PSIxNSIgcnk9IjE3IiBmaWxsPSIjMkIxNDE0Ii8+CiAgPGVsbGlwc2UgY3g9Ijc4IiBjeT0iMTMxIiByeD0iMTAiIHJ5PSIxMSIgZmlsbD0iIzZCMkEyMiIvPgogIDxlbGxpcHNlIGN4PSI3OCIgY3k9IjEzMCIgcng9IjYiIHJ5PSI3IiBmaWxsPSIjMUUwRTBFIi8+CiAgPGNpcmNsZSBjeD0iODMiIGN5PSIxMjIiIHI9IjUiIGZpbGw9IiNmZmYiLz4KICA8Y2lyY2xlIGN4PSI3MyIgY3k9IjEzNCIgcj0iMi4yIiBmaWxsPSIjZmZmIi8+CiAgPGVsbGlwc2UgY3g9IjEyMiIgY3k9IjEyOCIgcng9IjE1IiByeT0iMTciIGZpbGw9IiMyQjE0MTQiLz4KICA8ZWxsaXBzZSBjeD0iMTIyIiBjeT0iMTMxIiByeD0iMTAiIHJ5PSIxMSIgZmlsbD0iIzZCMkEyMiIvPgogIDxlbGxpcHNlIGN4PSIxMjIiIGN5PSIxMzAiIHJ4PSI2IiByeT0iNyIgZmlsbD0iIzFFMEUwRSIvPgogIDxjaXJjbGUgY3g9IjEyNyIgY3k9IjEyMiIgcj0iNSIgZmlsbD0iI2ZmZiIvPgogIDxjaXJjbGUgY3g9IjExNyIgY3k9IjEzNCIgcj0iMi4yIiBmaWxsPSIjZmZmIi8+CiAgPCEtLSBub3NlIGFuZCBzbWlsZSAtLT4KICA8cGF0aCBkPSJNOTUgMTQ0cTUgNSAxMCAwcS01LTQtMTAgMHoiIGZpbGw9IiNGMjhGQTUiLz4KICA8cGF0aCBkPSJNOTIgMTU0cTggNyAxNiAwIiBzdHJva2U9IiMyQjE0MTQiIHN0cm9rZS13aWR0aD0iMy41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8IS0tIFRyb2phbiBoZWxtZXQsIHNoYXBlZCB0byB0aGUgaGVhZDogZG9tZSBkb3duIHRvIHRoZSBicm93LCBjaGVlayBndWFyZHMgYWxvbmcgdGhlIGZhY2UgLS0+CiAgPHBhdGggZD0iTTMwIDEyMEMyNCA3MCA1MiA1MiAxMDAgNTJTMTc2IDcwIDE3MCAxMjBMMTYwIDExOEMxNTYgMTEyIDE0NiAxMDYgMTM2IDEwNFExMDAgOTYgNjQgMTA0QzU0IDEwNiA0NCAxMTIgNDAgMTE4eiIgZmlsbD0idXJsKCNnb2xkKSIvPgogIDxwYXRoIGQ9Ik0zMCAxMTZDMjggMTM2IDM0IDE1MiA0NiAxNjBDNTIgMTQ4IDUyIDEzMiA0NiAxMTZ6IiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPHBhdGggZD0iTTE3MCAxMTZDMTcyIDEzNiAxNjYgMTUyIDE1NCAxNjBDMTQ4IDE0OCAxNDggMTMyIDE1NCAxMTZ6IiBmaWxsPSJ1cmwoI2dvbGQpIi8+CiAgPHBhdGggZD0iTTQyIDExNFExMDAgOTIgMTU4IDExNCIgc3Ryb2tlPSIjRDM5NjFDIiBzdHJva2Utd2lkdGg9IjciIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik00OCA4NlE2NiA2NiA5MiA2MiIgc3Ryb2tlPSIjRkZGM0MyIiBzdHJva2Utd2lkdGg9IjYiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iLjgiLz4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjEyNiIgcj0iMy4yIiBmaWxsPSIjRDM5NjFDIi8+CiAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iMTI2IiByPSIzLjIiIGZpbGw9IiNEMzk2MUMiLz4KICA8IS0tIGNyZXN0OiBhIGJyaXN0bHkgYnJ1c2ggcnVubmluZyBmcm9udCB0byBiYWNrIG92ZXIgdGhlIHRvcCAtLT4KICA8cGF0aCBkPSJNODYgNTZDODQgMzIgOTIgMTQgMTA4IDEwQzEyOCA2IDE0NiAxOCAxNTAgMzZDMTQyIDMwIDEzMiAzMCAxMjQgMzRDMTE2IDM4IDExMiA0NiAxMTIgNTZ6IiBmaWxsPSJ1cmwoI2NyZXN0KSIvPgogIDxwYXRoIGQ9Ik05NCA1MGMwLTE0IDYtMjggMTgtMzRNMTA0IDUyYzItMTQgMTAtMjQgMjItMjZNMTE2IDQ2YzYtOCAxNi0xMCAyNi04IiBzdHJva2U9IiNFODU2NUUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9Ii43NSIvPgogIDxwYXRoIGQ9Ik04NCA1OFE5OCA1MCAxMTQgNTYiIHN0cm9rZT0iI0QzOTYxQyIgc3Ryb2tlLXdpZHRoPSI1IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==" alt="Yami, a round cardinal bunny wearing a gold Trojan helmet">
+    <h2 id="gate-h">join yami.</h2>
+    <p>Put in your email to get early access to Yami, the AI nutritionist made for USC.</p>
+    <form id="gateform" novalidate>
+      <label class="sr" for="em0">Your email</label>
+      <input id="em0" type="email" name="email" placeholder="you@usc.edu" autocomplete="email" required>
+      <div class="err" id="gerr" aria-live="polite"></div>
+      <button class="btn red" type="submit">join the beta</button>
+    </form>
+    <button class="skip" type="button" id="gskip">just looking for now</button>
+  </div>
+</div>
+
 <script>
 (function(){
   var K='yami-web-email';
@@ -572,6 +599,13 @@ html,body{overflow-x:clip}
     set(email);
     document.querySelectorAll('[data-signup]').forEach(function(f){var p=f.parentElement;p.classList.add('joined');var i=f.querySelector('input[type=email]');if(i){i.value=email}var b=f.querySelector('button');if(b){b.textContent="you're in"}});
   }
+  var gate=document.getElementById('gate'),gf=document.getElementById('gateform'),gerr=document.getElementById('gerr');
+  var had=get();
+  if(had){gate.classList.add('hide');joined(had)}else{setTimeout(function(){var i=document.getElementById('em0');i&&i.focus()},50)}
+  gf.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('em0').value.trim();if(!ok(v)){gerr.textContent='Enter an email like you@usc.edu.';return}send(v,'pop-up');joined(v);gate.querySelector('h2').textContent="you're in.";gate.querySelector('p').textContent="Welcome to Yami. Open the app and snap your first plate.";gf.style.display='none';var s=document.getElementById('gskip');s.textContent='see the website';setTimeout(function(){},0)});
+  document.getElementById('gskip').addEventListener('click',function(){gate.classList.add('hide')});
+  gate.addEventListener('click',function(e){if(e.target===gate&&get())gate.classList.add('hide')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')gate.classList.add('hide')});
   document.querySelectorAll('[data-signup]').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var v=f.querySelector('input[type=email]').value.trim();if(!ok(v))return;send(v,f.getAttribute('data-src'));joined(v)})});
 
   (function(){var tr=document.getElementById('track');if(!tr)return;var N=4,cur=0,cards=document.querySelectorAll('.fcard'),dots=document.querySelectorAll('.dots button');
