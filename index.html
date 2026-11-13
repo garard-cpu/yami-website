@@ -601,8 +601,8 @@ footer a{color:var(--ink);font-weight:700}
   var vids=tr.querySelectorAll('.car-slide');var seen=false;function vplay(){vids.forEach(function(sl,k){var v=sl.querySelector('video');if(!v)return;if(k===cur&&seen){if(v.paused){v.currentTime=0;var p=v.play();p&&p.catch&&p.catch(function(){})}}else v.pause()})}
   if('IntersectionObserver'in window){new IntersectionObserver(function(es){seen=es[0].isIntersecting;vplay()},{threshold:.4}).observe(tr)}else{seen=true}
   function mark(i){cur=i;setTimeout(vplay,0);cards.forEach(function(c,k){c.classList.toggle('on',k===i)});dots.forEach(function(d,k){d.setAttribute('aria-selected',k===i?'true':'false')})}
-  function go(i){i=(i+N)%N;tr.scrollTo({left:i*tr.clientWidth,behavior:'smooth'});mark(i)}
-  var tm;tr.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){mark(Math.round(tr.scrollLeft/tr.clientWidth))},80)});
+  var busy=false,bt;function go(i){i=(i+N)%N;mark(i);busy=true;clearTimeout(bt);tr.style.scrollSnapType='none';tr.scrollTo({left:i*tr.clientWidth,behavior:'smooth'});bt=setTimeout(function(){tr.scrollLeft=i*tr.clientWidth;tr.style.scrollSnapType='';busy=false},450)}
+  var tm;tr.addEventListener('scroll',function(){if(busy)return;clearTimeout(tm);tm=setTimeout(function(){mark(Math.round(tr.scrollLeft/tr.clientWidth))},80)});
   document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(+b.getAttribute('data-go'))})});
   document.querySelectorAll('[data-step]').forEach(function(b){b.addEventListener('click',function(){go(cur+(+b.getAttribute('data-step')))})});
   tr.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();go(cur+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1)}});
