@@ -1,5 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
-
 // Reads a meal photo for the Yami app at /app. The app calls GET /api/vision to check this is here,
 // then POSTs { image: "data:image/jpeg;base64,...", place } and gets back { food, meal, place, items }.
 // The Claude key lives only in Cloudflare Pages' environment variables (ANTHROPIC_API_KEY, as a secret), never in the page.
@@ -124,34 +122,43 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
   if (!match || image.length > MAX_IMAGE_CHARS) return json({ error: "bad-image" }, 400);
   const place = typeof body.place === "string" && PLACE_IDS.includes(body.place) ? body.place : null;
 
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  // Calls the Claude API directly with fetch (no SDK), so Cloudflare has nothing to install.
   try {
-    const response = await client.beta.messages.create({
-      model: "claude-sonnet-5-5",
-      max_tokens: 4000,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } },
-      system: PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "image", source: { type: "base64", media_type: match[1] as "image/jpeg", data: match[2] } },
-            { type: "text", text: place ? `They said they're eating at ${PLACE_LABELS[place]} (id: ${place}).` : "They did not say where they are eating." },
-          ],
-        },
-      ],
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": env.ANTHROPIC_API_KEY as string,
+        "anthropic-version": "2023-06-01",
+        "anthropic-beta": "server-side-fallback-2026-07-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-5-5",
+        max_tokens: 4000,
+        fallbacks: "default",
+        output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } },
+        system: PROMPT,
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "image", source: { type: "base64", media_type: match[1], data: match[2] } },
+              { type: "text", text: place ? `They said they're eating at ${PLACE_LABELS[place]} (id: ${place}).` : "They did not say where they are eating." },
+            ],
+          },
+        ],
+      }),
     });
+    if (res.status === 429 || res.status === 529) return json({ error: "busy" }, 429);
+    if (!res.ok) return json({ error: "claude", status: res.status }, 502);
+    const response = (await res.json()) as { stop_reason?: string; content?: { type: string; text?: string }[] };
     if (response.stop_reason === "refusal") return json({ error: "refusal" }, 422);
     if (response.stop_reason === "max_tokens") return json({ error: "truncated" }, 502);
-    const text = response.content.find((block): block is Anthropic.Beta.BetaTextBlock => block.type === "text")?.text;
+    const text = (response.content || []).find((block) => block.type === "text")?.text;
     if (!text) return json({ error: "empty" }, 502);
     const result: VisionResult = normalizeReading(JSON.parse(text), PLACE_IDS);
     return json(result);
-  } catch (error) {
-    if (error instanceof Anthropic.RateLimitError) return json({ error: "busy" }, 429);
-    if (error instanceof Anthropic.APIError) return json({ error: "claude", status: error.status }, 502);
+  } catch {
     return json({ error: "unreadable" }, 502);
   }
 };
