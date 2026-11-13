@@ -11,6 +11,7 @@
 // 3. After the "yami-proto" save effect (deps [d,N,v]): two effects that call window.__yamiSave("meals", v) and ("board", I).
 // 4. On Profile, before "Yami offers general guidance": r.jsx("div",{id:"yami-account"}).
 // 5. The page title is "Yami" (Saf's export says "Yami Prototype"; phones use it as the home screen name).
+// 6. The share card's site line: var SITE=location.host+'/app/' (Saf's export hard-codes the old netlify.app address).
 
 window.__yamiAcct = true;
 

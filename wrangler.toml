@@ -1,0 +1,4 @@
+# Cloudflare Pages settings. The site is the repo root; /functions holds the API (/api/vision, /api/instacart-list).
+name = "yami-usc"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
