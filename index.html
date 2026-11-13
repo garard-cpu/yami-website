@@ -301,14 +301,14 @@ footer a{color:var(--ink);font-weight:700}
 .proof .scan.done em{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
 
-.walk{display:none;flex-direction:column;gap:8px;margin-top:8px;min-height:182px;justify-content:flex-end}
+.walk{display:none;flex-direction:column;gap:8px;margin-top:10px}
 .fcard.on .walk{display:flex}
-.wb{display:block;position:relative;background:var(--cream);border:2px solid var(--ink);border-radius:16px 16px 16px 4px;padding:9px 12px;box-shadow:3px 3px 0 var(--ink);animation:wbIn .45s cubic-bezier(.2,1.4,.4,1) both;transform-origin:left bottom;transition:opacity .3s}
-.wb.old{opacity:.45;box-shadow:none}
+.wb{display:flex;align-items:flex-start;gap:10px;position:relative;background:var(--cream);border:2px solid var(--ink);border-radius:16px 16px 16px 4px;padding:9px 12px;box-shadow:3px 3px 0 var(--ink);animation:wbIn .45s cubic-bezier(.2,1.4,.4,1) both;transform-origin:left bottom}
 .wb.now{background:var(--gold)}
-.wb i{display:block;font:700 10px var(--mono);font-style:normal;text-transform:uppercase;letter-spacing:.05em;color:var(--red);margin-bottom:2px}
-.wb.now i{color:var(--ink)}
-.wb em{display:block;font:500 14px/1.35 var(--body,"DM Sans");font-style:normal;color:var(--ink)}
+.wb.lead{background:var(--paper)}
+.wb i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);font-style:normal}
+.wb em{display:block;font:500 15px/1.35 var(--body,"DM Sans");font-style:normal;color:var(--ink)}
+.wb em b{font-weight:800}
 @keyframes wbIn{from{opacity:0;transform:translateY(10px) scale(.85)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.wb{animation:none}}
 </style>
@@ -618,10 +618,11 @@ footer a{color:var(--ink);font-weight:700}
   var i=0;if(nm)setInterval(function(){nm.classList.add('out');setTimeout(function(){i=(i+1)%spots.length;nm.textContent=spots[i];nm.classList.remove('out')},250)},red?4000:1300);
   })();
 
-  (function(){var v=document.querySelector('video[src="groc.mp4"]'),box=document.getElementById('gwalk');if(!v||!box)return;var R=1.25;
-  var S=[[0,"step 1","Tap \u201chave yami help you pick your grocery list.\u201d"],[2,"yami checks your week","It looks at the plates you logged and spots what you\u2019re missing, like carbs."],[4.5,"pick your store","Trader Joe\u2019s, Target USC Village and more, closest first."],[8,"complex carbs","Yami walks you through every macronutrient you need at the store, starting with slow, steady carbs."],[16,"lean protein","Every item shows its protein, carbs, fiber and price at your store."],[24,"fruits & veggies","Half your plate. Grab a mix of colors for fiber and vitamins."],[34,"omega-3s","Salmon, chia, flax and walnuts. Yami tells you why each one matters."],[41,"snacks","Snacks with protein or fiber that actually hold you over."],[47,"healthy fats","Already getting plenty? Yami says to grab just one."],[52,"anything we missed?","Search anything, like sparkling water, and get real brands, macros and prices."]];
-  var cur=-1;function idx(t){var i=0;for(var k=0;k<S.length;k++)if(t>=S[k][0]/R)i=k;return i}
-  function show(i){if(i===cur)return;if(i<cur)box.innerHTML='';cur=i;box.querySelectorAll('.wb').forEach(function(b){b.classList.remove('now');b.classList.add('old')});var b=document.createElement('span');b.className='wb now';b.innerHTML='<i>'+S[i][1]+'</i><em>'+S[i][2]+'</em>';box.appendChild(b);var all=box.querySelectorAll('.wb');if(all.length>3)all[0].remove()}
+  (function(){var v=document.querySelector('video[src="groc.mp4"]'),box=document.getElementById('gwalk');if(!v||!box)return;
+  var S=[[0,"","yami curates your grocery list around the macros you need. it walks you through:"],[6.4,"1","<b>carbs.</b> slow, steady energy for long class days."],[12.8,"2","<b>protein.</b> every item shows its protein and price at your store."],[37.6,"3","<b>fats.</b> already getting plenty? yami says grab just one."]];
+  var cur=-1;function idx(t){var i=0;for(var k=0;k<S.length;k++)if(t>=S[k][0])i=k;return i}
+  function add(k){box.querySelectorAll('.wb').forEach(function(b){b.classList.remove('now')});var b=document.createElement('span');b.className='wb now'+(S[k][1]?'':' lead');b.innerHTML=(S[k][1]?'<i>'+S[k][1]+'</i>':'')+'<em>'+S[k][2]+'</em>';box.appendChild(b)}
+  function show(i){if(i===cur)return;if(i<cur){box.innerHTML='';cur=-1}for(var k=cur+1;k<=i;k++)add(k);cur=i}
   v.addEventListener('timeupdate',function(){show(idx(v.currentTime))});v.addEventListener('seeked',function(){cur=-1;box.innerHTML='';show(idx(v.currentTime))});show(0)})();
   document.querySelectorAll('[data-jump]').forEach(function(a){a.addEventListener('click',function(){var b=document.querySelector('[data-go="'+a.getAttribute('data-jump')+'"]');b&&setTimeout(function(){b.click()},400)})});
   document.getElementById('getx').addEventListener('click',function(){document.getElementById('getbar').classList.add('hide');document.body.style.paddingBottom='0'});
