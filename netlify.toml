@@ -1,19 +1,11 @@
-# The waitlist page is index.html at the root; the app is /app; /api/vision is the photo reader in netlify/functions.
+# Yami moved to Cloudflare Pages (https://yami-usc.pages.dev) to drop Netlify's free-plan badge.
+# This file only affects the old yami-usc.netlify.app address: every path forwards to the same path on the new site.
+# Cloudflare ignores netlify.toml.
 [build]
   publish = "."
 
-[functions]
-  directory = "netlify/functions"
-
-# Keep build-time files out of the public site.
 [[redirects]]
-  from = "/node_modules/*"
-  to = "/404"
-  status = 404
-  force = true
-
-[[redirects]]
-  from = "/netlify/*"
-  to = "/404"
-  status = 404
+  from = "/*"
+  to = "https://yami-usc.pages.dev/:splat"
+  status = 301
   force = true
