@@ -316,6 +316,10 @@ footer a{color:var(--ink);font-weight:700}
 .sb.now{background:var(--red);color:var(--cream)}
 @keyframes wbIn{from{opacity:0;transform:translateY(10px) scale(.85)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.wb{animation:none}}
+
+html,body{overflow-x:clip}
+.getbar{transition:opacity .25s,transform .25s}
+.getbar.away{opacity:0;pointer-events:none;transform:translate(-50%,24px)}
 </style>
 <script src="/app/firebase-config.js"></script>
 </head>
@@ -604,6 +608,8 @@ footer a{color:var(--ink);font-weight:700}
   document.querySelectorAll('[data-jump]').forEach(function(a){a.addEventListener('click',function(){var b=document.querySelector('[data-go="'+a.getAttribute('data-jump')+'"]');b&&setTimeout(function(){b.click()},400)})});
   document.getElementById('getx').addEventListener('click',function(){document.getElementById('getbar').classList.add('hide');document.body.style.paddingBottom='0'});
 })();
+
+  (function(){var g=document.getElementById('getbar'),f=document.getElementById('features');if(!g||!f||!('IntersectionObserver'in window))return;new IntersectionObserver(function(es){g.classList.toggle('away',es[0].isIntersecting)},{rootMargin:'0px 0px -35% 0px',threshold:0}).observe(f)})();
 </script>
 </body>
 </html>
