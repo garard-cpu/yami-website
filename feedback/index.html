@@ -166,6 +166,12 @@ async function save() {
     if (val) answers[k] = val.slice(0, 1000);
   }
   answers.from = (new URLSearchParams(location.search).get("from") || "link").slice(0, 40);
+  // Google Sheet (Yami Feedback + Sign-ups > Survey tab): one row per response.
+  await fetch("https://script.google.com/macros/s/AKfycbzO5p-JsMvPEA7UCwNUWDwntpWNsYpiB-LYvA_8rwBbhzEQgSCxB2c4cB8jZsRAT7sZ/exec", { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ kind: "survey", ...answers }) });
+  // Also try Firebase; ignore if its rules aren't published yet.
+  try { await saveFirebase(answers); } catch {}
+}
+async function saveFirebase(answers) {
   const base = "https://www.gstatic.com/firebasejs/11.0.2/";
   const [{ initializeApp }, F] = await Promise.all([import(base + "firebase-app.js"), import(base + "firebase-firestore.js")]);
   await import("/app/firebase-config.js");
