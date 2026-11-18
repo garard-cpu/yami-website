@@ -32,7 +32,7 @@ service cloud.firestore {
     match /feedback/{id} {
       allow create: if request.resource.data.keys().hasOnly(['answers', 'at'])
         && request.resource.data.answers is map
-        && request.resource.data.answers.size() <= 20
+        && request.resource.data.answers.size() <= 40
         && request.resource.data.at == request.time;
       allow read: if isAdmin();
     }

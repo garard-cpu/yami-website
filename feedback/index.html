@@ -43,7 +43,7 @@ textarea{min-height:110px}
 .scale .opt{flex-direction:column;justify-content:center;padding:12px 4px;font-size:13px;text-align:center}
 .scale .opt .e{font-size:28px;width:auto}
 .err{color:var(--red);font-weight:700;margin-top:12px}
-.big{font-size:56px;line-height:1;margin-bottom:10px}
+.wl{display:block;font:700 14px/1.2 var(--body);margin:18px 0 8px}.wl span{color:var(--muted);font-weight:500}.wish{min-height:70px!important}
 </style>
 </head>
 <body>
@@ -54,24 +54,28 @@ textarea{min-height:110px}
 <script type="module">
 const Q = [
   { id:"intro", type:"intro" },
-  { id:"onboarding", tag:"getting started", title:"how did <em>signing up</em> feel?", sub:"the quick setup survey when you first opened yami.", type:"one",
-    opts:[["🍓","smooth and quick"],["🥪","fine, a little long"],["🌶️","confusing"],["🥡","didn't get that far"]] },
+  { id:"why", tag:"the big one", title:"what made you want to <em>open</em> yami?", type:"one",
+    opts:["curious what's in my food","want to eat healthier","hit a fitness goal","save money on food","a friend sent it to me"] },
+  { id:"onboarding", tag:"getting started", title:"how did the <em>onboarding survey</em> feel?", type:"one",
+    opts:["too long","just right","too short","confusing"] },
   { id:"tried", tag:"features", title:"what did you <em>try</em>?", sub:"tap all that apply.", type:"many",
-    opts:[["🍽️","snap your plate"],["🛒","groceries"],["🥡","order smart"],["🥗","dashboard"]] },
+    opts:["snap your plate","groceries","order smart","dashboard"] },
+  { id:"snaps", tag:"snap your plate", title:"how many meals did you <em>snap</em>?", type:"one",
+    opts:["none yet","1","2 to 3","4 or more"] },
+  { id:"forgot", tag:"logging", title:"did you <em>forget</em> to log your meals?", type:"one",
+    opts:["yes, often","sometimes","no, i remembered"] },
   { id:"snap", tag:"snap your plate", title:"did the scan get your <em>plate</em> right?", type:"one", skipUnless:"snap your plate",
-    opts:[["🥑","spot on"],["🍌","pretty close"],["🧂","way off"]] },
+    opts:["spot on","pretty close","way off"] },
   { id:"order", tag:"order smart", title:"would you actually <em>order</em> what it picked?", type:"one", skipUnless:"order smart",
-    opts:[["🌯","yes, totally"],["🥗","maybe"],["🧊","no"]] },
+    opts:["yes, totally","maybe","no"] },
   { id:"groceries", tag:"groceries", title:"would you <em>shop</em> with that list?", type:"one", skipUnless:"groceries",
-    opts:[["🥦","yes"],["🍠","maybe"],["🧊","no"]] },
+    opts:["yes","maybe","no"] },
   { id:"dashboard", tag:"dashboard", title:"was your <em>dashboard</em> useful?", type:"one", skipUnless:"dashboard",
-    opts:[["🍯","yes, it helped"],["🍞","it was okay"],["🥄","didn't get it"]] },
+    opts:["yes, it helped","it was okay","didn't get it"] },
   { id:"fav", tag:"favorite", title:"your <em>favorite</em> part?", type:"one",
-    opts:[["🍽️","snap your plate"],["🛒","groceries"],["🥡","order smart"],["🥗","dashboard"]] },
-  { id:"confused", tag:"be honest", title:"one thing that <em>confused</em> you?", sub:"or anything that didn't work. optional.", type:"text", ph:"the part where..." },
-  { id:"keep", tag:"the big one", title:"would you keep <em>using</em> yami?", type:"scale",
-    opts:[["🥚","nah"],["🍳","maybe"],["🥞","probably"],["🍓","yes!"]] },
-  { id:"wish", tag:"dream feature", title:"what would make yami a <em>must-have</em>?", sub:"optional.", type:"text", ph:"i wish yami could..." },
+    opts:["snap your plate","groceries","order smart","dashboard"] },
+  { id:"keep", tag:"last tap", title:"would you keep <em>using</em> yami?", type:"one",
+    opts:["no","maybe","probably","yes!"] },
   { id:"email", tag:"last one", title:"want <em>early access</em> to the app store version?", sub:"leave your email. optional.", type:"email" },
   { id:"done", type:"done" },
 ];
@@ -90,23 +94,25 @@ function render() {
   document.getElementById("count").textContent = q.type === "intro" ? "1 min" : q.type === "done" ? "done!" : `${pos + 1} / ${real.length}`;
 
   if (q.type === "intro") {
-    card.innerHTML = `<div class="big">🥣</div><span class="tag">quick check-in</span>
+    card.innerHTML = `<span class="tag">quick check-in</span>
       <h1>tell us what you <em>think</em> of yami.</h1>
-      <p class="sub">about 1 minute. mostly taps. good or bad, it all helps us build yami for usc.</p>
+      <p class="sub">about 2 minutes. mostly taps. good or bad, it all helps us build yami for usc.</p>
       <div class="row"><span></span><button class="btn red" id="next">let's go</button></div>`;
   } else if (q.type === "done") {
-    card.innerHTML = `<div class="big">🍓</div><span class="tag">thank you</span>
+    card.innerHTML = `<span class="tag">thank you</span>
       <h1>you just helped build <em>yami</em>.</h1>
       <p class="sub">we read every answer. go snap your next meal!</p>
       <div class="row"><span></span><a class="btn red" href="/app/">open yami</a></div>`;
     return;
   } else {
     let body = "";
-    if (q.type === "one" || q.type === "many" || q.type === "scale") {
+    if (q.type === "one" || q.type === "many") {
       const cur = A[q.id];
       const on = (v) => (q.type === "many" ? (cur || []).includes(v) : cur === v);
-      body = `<div class="${q.type === "scale" ? "scale" : "opts"}">${q.opts.map(([e, t]) =>
-        `<button class="opt" data-v="${esc(t)}" aria-pressed="${on(t)}"><span class="e">${e}</span><span>${t}</span></button>`).join("")}</div>`;
+      body = `<div class="opts">${q.opts.map((t) =>
+        `<button class="opt" data-v="${esc(t)}" aria-pressed="${on(t)}"><span>${t}</span></button>`).join("")}</div>
+        <label class="wl">what do you wish it had? <span>(optional)</span></label>
+        <textarea id="wish" class="wish" maxlength="500" placeholder="i wish...">${esc(A[q.id + "_wish"] || "")}</textarea>`;
     } else if (q.type === "text") {
       body = `<textarea id="in" maxlength="1000" placeholder="${q.ph}">${esc(A[q.id] || "")}</textarea>`;
     } else if (q.type === "email") {
@@ -124,8 +130,14 @@ function render() {
         const s = new Set(A[q.id] || []); s.has(v) ? s.delete(v) : s.add(v); A[q.id] = [...s];
         b.setAttribute("aria-pressed", s.has(v));
         document.getElementById("next").disabled = !A[q.id].length;
-      } else { A[q.id] = v; render(); setTimeout(go, 220); }
+      } else {
+        A[q.id] = v;
+        card.querySelectorAll(".opt").forEach((o) => o.setAttribute("aria-pressed", o.dataset.v === v));
+        document.getElementById("next").disabled = false;
+      }
     });
+    const w = document.getElementById("wish");
+    if (w) w.oninput = () => (A[q.id + "_wish"] = w.value);
     const inp = document.getElementById("in");
     if (inp) inp.oninput = () => (A[q.id] = inp.value);
     document.getElementById("back").onclick = () => { if (i > 0) { i--; render(); } };
@@ -148,7 +160,7 @@ function showErr(m) { const e = document.getElementById("err"); e.textContent = 
 async function save() {
   const answers = {};
   for (const [k, v] of Object.entries(A)) {
-    if (!visible().some((q) => q.id === k)) continue;
+    if (!visible().some((q) => q.id === k.replace(/_wish$/, ""))) continue;
     const val = Array.isArray(v) ? v.join(", ") : String(v).trim();
     if (val) answers[k] = val.slice(0, 1000);
   }
