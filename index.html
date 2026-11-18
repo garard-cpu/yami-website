@@ -413,15 +413,14 @@ html,body{overflow-x:clip}
   <div class="pcard">
     <button class="px" type="button" data-close aria-label="Close">&times;</button>
     <div class="pbody">
-      <div class="pbig">🥣</div>
-      <span class="peye">welcome to yami</span>
-      <h3 id="ypop-t">get early access.</h3>
-      <p>be first on the app store in january, plus new usc food finds.</p>
+            <span class="peye">welcome to yami</span>
+      <h3 id="ypop-t">stay tuned.</h3>
+      <p>yami is working on doordash discounts and more accurate info from the restaurants on campus. want to stay informed?</p>
       <form novalidate>
         <input type="email" name="email" placeholder="you@usc.edu" autocomplete="email" required>
         <input type="tel" name="phone" placeholder="phone number (optional)" autocomplete="tel" inputmode="tel">
         <div class="perr" hidden></div>
-        <button class="btn red" type="submit">i'm in</button>
+        <button class="btn red" type="submit">keep me posted</button>
       </form>
       <button class="pno" type="button" data-close>maybe later</button>
     </div>
@@ -760,7 +759,7 @@ html,body{overflow-x:clip}
       if(!ok(v)){er.textContent="that email doesn't look right.";er.hidden=false;return}
       if(ph&&ph.replace(/\D/g,'').length<10){er.textContent="add your full number, or leave it blank.";er.hidden=false;return}
       send(v,'popup',ph);joined(v);
-      m.querySelector('.pbody').innerHTML='<div class="pbig">🍓</div><h3>you\'re in!</h3><p>we\'ll text you when yami hits the app store in january.</p><a class="btn red" href="/app/">open yami</a>';
+      m.querySelector('.pbody').innerHTML='<h3>you\'re in!</h3><p>we\'ll keep you posted on discounts and what\'s new.</p><a class="btn red" href="/app/">open yami</a>';
       try{localStorage.setItem('yami-pop-seen','1')}catch(e){}
     });
   })();
