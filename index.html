@@ -413,7 +413,7 @@ html,body{overflow-x:clip}
 .jsteps li{position:relative;background:var(--paper);border:var(--line);border-radius:22px;box-shadow:5px 5px 0 var(--ink);padding:24px 20px 20px}
 .jsteps li b{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--gold);border:2.5px solid var(--ink);font:800 22px/1 var(--display);margin-bottom:12px}
 .jsteps li h3{font-size:26px;color:var(--red);margin-bottom:8px}
-.jsteps li p{margin:0 0 14px;font-size:15.5px}
+.jsteps li p{margin:0 0 14px;font-size:15.5px}.jsteps li strong{color:var(--red)}
 .jsteps .jtag{display:inline-block;font:700 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:6px 10px}
 .jsteps li:not(:last-child)::after{content:"→";position:absolute;right:-16px;top:50%;transform:translateY(-50%);font:800 20px/1 var(--display);color:var(--red);z-index:2}
 @media (max-width:900px){.jsteps{grid-template-columns:1fr 1fr}.jsteps li::after{display:none}}
@@ -517,13 +517,13 @@ html,body{overflow-x:clip}
 
 <section class="journey" id="how">
   <div class="wrap">
-    <div class="sec-h"><span class="eyebrow">how yami works</span><h2>one goal. four simple steps.</h2>
-      <p>Yami has one job: help you eat for your goal at USC. Everything in the app is a step toward that.</p></div>
+    <div class="sec-h"><span class="eyebrow">how yami works</span><h2>reach your goals, on budget, around usc.</h2>
+      <p>Yami is your personalized nutritionist on campus. It helps you figure out what to eat, scores your plate, picks out your groceries from the stores around you, and helps you order smart when you're hungry.</p></div>
     <ol class="jsteps">
-      <li><b>1</b><h3>set your goal.</h3><p>Answer a 1-minute survey: more energy, more protein, eating healthier or saving money.</p><span class="jtag">onboarding</span></li>
-      <li><b>2</b><h3>snap what you eat.</h3><p>Take a photo of your plate. Yami shows how it fits your goal and one easy change for next time.</p><span class="jtag">snap your plate</span></li>
-      <li><b>3</b><h3>know what to eat next.</h3><p>Hungry? Yami picks a meal on or off campus. Shopping? It builds your grocery list on budget.</p><span class="jtag">order smart · groceries</span></li>
-      <li><b>4</b><h3>make it a habit.</h3><p>See your progress, one habit for today and your streak. Small wins, every day.</p><span class="jtag">dashboard · badges</span></li>
+      <li><b>1</b><h3>set your goal.</h3><p>Answer a 1-minute survey.</p><span class="jtag">onboarding</span></li>
+      <li><b>2</b><h3>snap what you eat.</h3><p>Yami <strong>evaluates your plate</strong>, whether you made it or got it around campus.</p><span class="jtag">snap your plate</span></li>
+      <li><b>3</b><h3>know what to eat next.</h3><p>When you're hungry around campus, Yami recommends the best fit for you, from on-campus or off-campus dining.</p><span class="jtag">order smart · groceries</span></li>
+      <li><b>4</b><h3>make it a habit.</h3><p>View your past plates and fuel scores, share with friends, and see how you're doing on your budget.</p><span class="jtag">dashboard · badges</span></li>
     </ol>
   </div>
 </section>
