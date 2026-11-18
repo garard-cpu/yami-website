@@ -320,6 +320,48 @@ footer a{color:var(--ink);font-weight:700}
 html,body{overflow-x:clip}
 .getbar{transition:opacity .25s,transform .25s}
 .getbar.away{opacity:0;pointer-events:none;transform:translate(-50%,24px)}
+
+/* install demo */
+.inst .stage{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:nowrap}
+.inst .phone{width:min(280px,58vw);flex:none;margin:0}
+.ix{position:relative;height:100%;background:#fff;font-family:var(--body)}
+.ix .fr{position:absolute;inset:0;opacity:0;transition:opacity .35s}
+.ix .fr.on{opacity:1}
+.ix .web{position:absolute;inset:0;background:var(--cream);padding:46px 16px 0}
+.ix .web b{font:800 30px/1 var(--display);color:var(--red);display:block;margin-bottom:8px}
+.ix .web p{margin:0;font-size:13px;color:var(--muted)}
+.ix .bar{position:absolute;left:10px;right:10px;bottom:46px;background:#f1f1f3;border-radius:14px;padding:9px 12px;font:600 12px var(--body);color:#333;text-align:center}
+.ix .tools{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:space-around;align-items:center;color:#0a7aff}
+.ix .tools svg{width:22px;height:22px}
+.ix .tap{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(245,194,51,.55);border:2.5px solid var(--ink);animation:tap 1.2s ease-out infinite}
+@keyframes tap{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.3);opacity:0}}
+.ix .sheet{position:absolute;left:0;right:0;bottom:0;background:#f2f2f7;border-radius:18px 18px 0 0;padding:14px 12px 20px;box-shadow:0 -6px 20px rgba(0,0,0,.15);transform:translateY(100%);transition:transform .45s}
+.ix .fr.on .sheet{transform:none}
+.ix .row{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:11px 12px;font:600 13px var(--body);color:#111;border-bottom:1px solid #e5e5ea}
+.ix .row:first-child{border-radius:10px 10px 0 0}.ix .row:last-child{border-radius:0 0 10px 10px;border:0}
+.ix .row.hi{background:#fff6d6}
+.ix .dlg{position:absolute;inset:0;background:#f2f2f7;padding:16px 14px}
+.ix .dlg .hd{display:flex;justify-content:space-between;font:600 13px var(--body);color:#0a7aff;margin-bottom:14px}
+.ix .dlg .hd b{color:#111}
+.ix .dlg .card{display:flex;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:10px}
+.ix .dlg .card img{width:46px;height:46px;border-radius:11px}
+.ix .home{position:absolute;inset:0;background:linear-gradient(160deg,#7a0808,#2b1e1a);padding:40px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;align-content:start}
+.ix .home i{display:block;aspect-ratio:1;border-radius:12px;background:rgba(255,255,255,.22)}
+.ix .home .ya{display:flex;flex-direction:column;align-items:center;gap:4px;font:600 10px var(--body);color:#fff}
+.ix .home .ya img{width:100%;aspect-ratio:1;border-radius:12px;animation:pop .8s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.ix .sign{position:absolute;inset:0;background:var(--cream);padding:60px 18px;text-align:center}
+.ix .sign img{width:80px;margin:0 auto 10px}
+.ix .sign b{font:800 26px/1 var(--display);display:block;margin-bottom:12px}
+.ix .sign span{display:block;border:2px solid var(--ink);border-radius:999px;padding:9px;margin-top:8px;font:700 13px var(--body);background:#fff}
+.ix .sign span.r{background:var(--red);color:var(--cream)}
+.isteps{display:flex;flex-direction:column;gap:8px;width:260px;margin:0;padding:0;list-style:none}
+.isteps li{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:2px solid var(--ink);border-radius:16px 16px 16px 4px;padding:9px 12px;box-shadow:3px 3px 0 var(--ink);font:500 15px/1.35 var(--body);opacity:.45;transition:opacity .3s,background .3s}
+.isteps li.on{opacity:1;background:var(--gold)}
+.isteps li.done{opacity:1}
+.isteps i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);font-style:normal}
+.inst .andr{text-align:center;margin:22px auto 0;max-width:620px;font-size:15px;color:var(--muted)}
+@media (max-width:860px){.inst .stage{gap:10px}.isteps{width:auto;flex:1;min-width:0}.isteps li{font-size:12.5px;padding:7px 9px}.isteps i{width:20px;height:20px;font-size:11px}}
 </style>
 <script src="/app/firebase-config.js"></script>
 </head>
@@ -530,6 +572,29 @@ html,body{overflow-x:clip}
   </div>
 </section>
 
+<section class="inst" id="install">
+  <div class="wrap">
+    <div class="sec-h"><span class="eyebrow">get yami on your phone</span><h2>add yami to your home screen.</h2></div>
+    <div class="stage">
+      <div class="phone" aria-hidden="true"><div class="screen"><div class="ix" id="ix">
+        <div class="fr on"><div class="web"><b>yami</b><p>eat well at usc.</p></div><div class="bar">yami-usc.pages.dev/app</div><div class="tools"><span>‹</span><span>›</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/></svg><span>▢</span><span>⧉</span></div><span class="tap" style="left:50%;bottom:-6px;top:auto;margin-bottom:0"></span></div>
+        <div class="fr"><div class="web"><b>yami</b><p>eat well at usc.</p></div><div class="sheet"><div class="row">Copy</div><div class="row">Add to Reading List</div><div class="row hi">Add to Home Screen <span>⊞</span></div><div class="row">Add Bookmark</div></div><span class="tap" style="left:50%;top:auto;bottom:62px"></span></div>
+        <div class="fr"><div class="dlg"><div class="hd"><span>Cancel</span><b>Add to Home Screen</b><span>Add</span></div><div class="card"><img src="/apple-touch-icon.png" alt=""><div><b>Yami</b><br><small>yami-usc.pages.dev</small></div></div></div><span class="tap" style="right:8px;left:auto;top:28px;margin:-22px -6px 0 0"></span></div>
+        <div class="fr"><div class="home"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="ya"><img src="/apple-touch-icon.png" alt="">Yami</span></div></div>
+        <div class="fr"><div class="sign"><img src="/yami-trojan.svg" alt=""><b>welcome to yami.</b><span>continue with google</span><span>continue with apple</span><span class="r">sign up with email</span></div></div>
+      </div></div></div>
+      <ol class="isteps" id="isteps">
+        <li class="on"><i>1</i><span>open <b>yami-usc.pages.dev/app</b> in safari and tap <b>share</b>.</span></li>
+        <li><i>2</i><span>scroll down and tap <b>add to home screen</b>.</span></li>
+        <li><i>3</i><span>tap <b>add</b>.</span></li>
+        <li><i>4</i><span>yami is on your home screen, like any app.</span></li>
+        <li><i>5</i><span>open it, sign in, and take the quick survey.</span></li>
+      </ol>
+    </div>
+    <p class="andr">on android? open the link in chrome, tap <b>⋮</b>, then <b>add to home screen</b>. no app store needed.</p>
+  </div>
+</section>
+
 <section class="final" id="join">
   <div class="wrap">
     <div class="box">
@@ -605,6 +670,7 @@ html,body{overflow-x:clip}
   function render(s,t){var S=W[s];if(!S)return;if(s!==src){src=s;cur=-1;box.innerHTML=''}var i=0;for(var k=0;k<S.length;k++)if(t>=S[k][0])i=k;if(i===cur)return;if(i<cur){box.innerHTML='';cur=-1}for(var k2=cur+1;k2<=i;k2++)add(S,k2);cur=i}
   document.querySelectorAll('.car-slide video').forEach(function(v){var s=v.getAttribute('src');v.addEventListener('timeupdate',function(){if(s==='groc.mp4'){var c=v.currentTime,r=c<3.4?2.75:(c<6.3?1:1.2);if(v.playbackRate!==r)v.playbackRate=r}if(!v.paused)render(s,v.currentTime)});v.addEventListener('play',function(){render(s,v.currentTime)});v.addEventListener('seeked',function(){if(!v.paused){cur=-1;box.innerHTML='';render(s,v.currentTime)}})});
   render("scan.mp4",0)})();
+  (function(){var f=document.querySelectorAll('#ix .fr'),s=document.querySelectorAll('#isteps li');if(!f.length)return;var i=0,D=[2600,2600,2200,2200,3000];function show(){f.forEach(function(x,k){x.classList.toggle('on',k===i)});s.forEach(function(x,k){x.classList.toggle('on',k===i);x.classList.toggle('done',k<i)});setTimeout(function(){i=(i+1)%f.length;show()},D[i])}show()})();
   document.querySelectorAll('[data-jump]').forEach(function(a){a.addEventListener('click',function(){var b=document.querySelector('[data-go="'+a.getAttribute('data-jump')+'"]');b&&setTimeout(function(){b.click()},400)})});
   document.getElementById('getx').addEventListener('click',function(){document.getElementById('getbar').classList.add('hide');document.body.style.paddingBottom='0'});
 })();
