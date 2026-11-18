@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>tell yami what you think</title>
+<meta name="description" content="A 1-minute check-in about Yami, the AI nutritionist for USC students.">
+<link rel="icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF3E6;--paper:#FFFBF3;--red:#9E0B0B;--gold:#F5C233;--ink:#2B1E1A;--muted:#5E4A44;--line:2.5px solid var(--ink);
+--display:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;--body:"DM Sans",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(158,11,11,.09) 1.4px,transparent 1.4px);background-size:26px 26px;color:var(--ink);font:500 17px/1.45 var(--body);display:flex;flex-direction:column;min-height:100dvh}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;max-width:560px;width:100%;margin:0 auto}
+.brand{font:800 28px/1 var(--display);color:var(--red);text-decoration:none;letter-spacing:-.04em}
+.count{font:700 12px/1 var(--mono);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:6px 10px}
+.bar{max-width:520px;width:calc(100% - 40px);margin:0 auto;height:12px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);border-right:2px solid var(--ink);transition:width .35s}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:100%;max-width:520px;background:var(--paper);border:var(--line);border-radius:26px;box-shadow:6px 6px 0 var(--ink);padding:26px 22px;animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.tag{display:inline-block;font:700 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:10px}
+h1{font:800 clamp(30px,8vw,40px)/1 var(--display);letter-spacing:-.03em;margin:0 0 8px;text-transform:lowercase}
+h1 em{font-style:normal;color:var(--red)}
+p.sub{color:var(--muted);margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:var(--line);border-radius:16px;padding:13px 14px;font:700 16px/1.2 var(--body);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s,background .15s}
+.opt:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.opt .e{font-size:22px;width:28px;text-align:center}
+.opt[aria-pressed=true]{background:var(--gold)}
+textarea,input[type=email]{width:100%;border:var(--line);border-radius:16px;padding:14px;font:500 16px/1.4 var(--body);background:#fff;color:var(--ink);resize:vertical}
+textarea{min-height:110px}
+.row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:var(--line);border-radius:999px;padding:13px 22px;font:800 16px/1 var(--display);cursor:pointer;box-shadow:4px 4px 0 var(--ink);text-transform:lowercase;text-decoration:none}
+.btn.red{background:var(--red);color:var(--cream)}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;color:var(--muted);padding-left:4px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.scale{display:flex;justify-content:space-between;gap:8px}
+.scale .opt{flex-direction:column;justify-content:center;padding:12px 4px;font-size:13px;text-align:center}
+.scale .opt .e{font-size:28px;width:auto}
+.err{color:var(--red);font-weight:700;margin-top:12px}
+.wl{display:block;font:700 14px/1.2 var(--body);margin:18px 0 8px}.wl span{color:var(--muted);font-weight:500}.wish{min-height:70px!important}
+</style>
+</head>
+<body>
+<header><a class="brand" href="/">yami</a><span class="count" id="count">1 min</span></header>
+<div class="bar"><i id="prog"></i></div>
+<main><div class="card" id="card"></div></main>
+
+<script type="module">
+const Q = [
+  { id:"intro", type:"intro" },
+  { id:"why", tag:"the big one", title:"what made you want to <em>open</em> yami?", type:"one",
+    opts:["curious what's in my food","want to eat healthier","hit a fitness goal","save money on food","a friend sent it to me"] },
+  { id:"onboarding", tag:"getting started", title:"how did the <em>onboarding survey</em> feel?", type:"one",
+    opts:["too long","just right","too short","confusing"] },
+  { id:"tried", tag:"features", title:"what did you <em>try</em>?", sub:"tap all that apply.", type:"many",
+    opts:["snap your plate","groceries","order smart","dashboard"] },
+  { id:"snaps", tag:"snap your plate", title:"how many meals did you <em>snap</em>?", type:"one",
+    opts:["none yet","1","2 to 3","4 or more"] },
+  { id:"forgot", tag:"logging", title:"did you <em>forget</em> to log your meals?", type:"one",
+    opts:["yes, often","sometimes","no, i remembered"] },
+  { id:"snap", tag:"snap your plate", title:"did the scan get your <em>plate</em> right?", type:"one", skipUnless:"snap your plate",
+    opts:["spot on","pretty close","way off"] },
+  { id:"order", tag:"order smart", title:"would you actually <em>order</em> what it picked?", type:"one", skipUnless:"order smart",
+    opts:["yes, totally","maybe","no"] },
+  { id:"groceries", tag:"groceries", title:"would you <em>shop</em> with that list?", type:"one", skipUnless:"groceries",
+    opts:["yes","maybe","no"] },
+  { id:"dashboard", tag:"dashboard", title:"was your <em>dashboard</em> useful?", type:"one", skipUnless:"dashboard",
+    opts:["yes, it helped","it was okay","didn't get it"] },
+  { id:"fav", tag:"favorite", title:"your <em>favorite</em> part?", type:"one",
+    opts:["snap your plate","groceries","order smart","dashboard"] },
+  { id:"keep", tag:"last tap", title:"would you keep <em>using</em> yami?", type:"one",
+    opts:["no","maybe","probably","yes!"] },
+  { id:"next", tag:"yami's future", title:"you could be part of <em>yami's future</em>.", sub:"what feature would you like yami to have next, or what would be most useful?", type:"text", ph:"i'd love if yami could..." },
+  { id:"email", tag:"what's next", title:"want to stay <em>informed</em>?", sub:"yami is working on getting you discounts through doordash and more accurate info from the restaurants on campus. leave your email and we'll keep you posted. optional.", type:"email" },
+  { id:"done", type:"done" },
+];
+
+const A = {};
+let i = 0;
+const card = document.getElementById("card");
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const visible = () => Q.filter((q) => !q.skipUnless || (A.tried || []).includes(q.skipUnless));
+
+function render() {
+  const list = visible(), q = list[i];
+  const real = list.filter((x) => x.type !== "intro" && x.type !== "done");
+  const pos = real.indexOf(q);
+  document.getElementById("prog").style.width = (q.type === "done" ? 100 : q.type === "intro" ? 0 : (pos / real.length) * 100) + "%";
+  document.getElementById("count").textContent = q.type === "intro" ? "1 min" : q.type === "done" ? "done!" : `${pos + 1} / ${real.length}`;
+
+  if (q.type === "intro") {
+    card.innerHTML = `<span class="tag">quick check-in</span>
+      <h1>tell us what you <em>think</em> of yami.</h1>
+      <p class="sub">about 2 minutes. mostly taps. good or bad, it all helps us build yami for usc.</p>
+      <div class="row"><span></span><button class="btn red" id="next">let's go</button></div>`;
+  } else if (q.type === "done") {
+    card.innerHTML = `<span class="tag">thank you</span>
+      <h1>you just helped build <em>yami</em>.</h1>
+      <p class="sub">we read every answer. go snap your next meal!</p>
+      <div class="row"><span></span><a class="btn red" href="/app/">open yami</a></div>`;
+    return;
+  } else {
+    let body = "";
+    if (q.type === "one" || q.type === "many") {
+      const cur = A[q.id];
+      const on = (v) => (q.type === "many" ? (cur || []).includes(v) : cur === v);
+      body = `<div class="opts">${q.opts.map((t) =>
+        `<button class="opt" data-v="${esc(t)}" aria-pressed="${on(t)}"><span>${t}</span></button>`).join("")}</div>
+        <label class="wl">what do you wish it had? <span>(optional)</span></label>
+        <textarea id="wish" class="wish" maxlength="500" placeholder="i wish...">${esc(A[q.id + "_wish"] || "")}</textarea>`;
+    } else if (q.type === "text") {
+      body = `<textarea id="in" maxlength="1000" placeholder="${q.ph}">${esc(A[q.id] || "")}</textarea>`;
+    } else if (q.type === "email") {
+      body = `<input type="email" id="in" maxlength="200" placeholder="you@usc.edu" value="${esc(A[q.id] || "")}">`;
+    }
+    const optional = q.type === "text" || q.type === "email";
+    const last = q.type === "email";
+    card.innerHTML = `<span class="tag">${q.tag}</span><h1>${q.title}</h1>${q.sub ? `<p class="sub">${q.sub}</p>` : ""}${body}
+      <div class="err" id="err" hidden></div>
+      <div class="row"><button class="btn ghost" id="back">← back</button>
+      <button class="btn red" id="next" ${optional || A[q.id]?.length ? "" : "disabled"}>${last ? "send" : "next"}</button></div>`;
+    card.querySelectorAll(".opt").forEach((b) => b.onclick = () => {
+      const v = b.dataset.v;
+      if (q.type === "many") {
+        const s = new Set(A[q.id] || []); s.has(v) ? s.delete(v) : s.add(v); A[q.id] = [...s];
+        b.setAttribute("aria-pressed", s.has(v));
+        document.getElementById("next").disabled = !A[q.id].length;
+      } else {
+        A[q.id] = v;
+        card.querySelectorAll(".opt").forEach((o) => o.setAttribute("aria-pressed", o.dataset.v === v));
+        document.getElementById("next").disabled = false;
+      }
+    });
+    const w = document.getElementById("wish");
+    if (w) w.oninput = () => (A[q.id + "_wish"] = w.value);
+    const inp = document.getElementById("in");
+    if (inp) inp.oninput = () => (A[q.id] = inp.value);
+    document.getElementById("back").onclick = () => { if (i > 0) { i--; render(); } };
+  }
+  document.getElementById("next").onclick = go;
+}
+
+async function go() {
+  const list = visible(), q = list[i];
+  if (q.type === "email") {
+    const e = (A.email || "").trim();
+    if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return showErr("that email doesn't look right.");
+    const b = document.getElementById("next"); b.disabled = true; b.textContent = "sending…";
+    try { await save(); } catch (err) { b.disabled = false; b.textContent = "send"; return showErr("couldn't send. check your connection and try again."); }
+  }
+  i = Math.min(i + 1, list.length - 1); render();
+}
+function showErr(m) { const e = document.getElementById("err"); e.textContent = m; e.hidden = false; }
+
+async function save() {
+  const answers = {};
+  for (const [k, v] of Object.entries(A)) {
+    if (!visible().some((q) => q.id === k.replace(/_wish$/, ""))) continue;
+    const val = Array.isArray(v) ? v.join(", ") : String(v).trim();
+    if (val) answers[k] = val.slice(0, 1000);
+  }
+  answers.from = (new URLSearchParams(location.search).get("from") || "link").slice(0, 40);
+  // Google Sheet (Yami Feedback + Sign-ups > Survey tab): one row per response.
+  await fetch("https://script.google.com/macros/s/AKfycbzO5p-JsMvPEA7UCwNUWDwntpWNsYpiB-LYvA_8rwBbhzEQgSCxB2c4cB8jZsRAT7sZ/exec", { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ kind: "survey", ...answers }) });
+  // Also try Firebase; ignore if its rules aren't published yet.
+  try { await saveFirebase(answers); } catch {}
+}
+async function saveFirebase(answers) {
+  const base = "https://www.gstatic.com/firebasejs/11.0.2/";
+  const [{ initializeApp }, F] = await Promise.all([import(base + "firebase-app.js"), import(base + "firebase-firestore.js")]);
+  await import("/app/firebase-config.js");
+  const c = window.YAMI_FIREBASE;
+  const db = F.getFirestore(initializeApp({ apiKey: c.apiKey, authDomain: c.authDomain, projectId: c.projectId, appId: c.appId }));
+  await F.addDoc(F.collection(db, "feedback"), { answers, at: F.serverTimestamp() });
+}
+
+render();
+</script>
+</body>
+</html>

@@ -17,12 +17,22 @@ service cloud.firestore {
 
     // Homepage waitlist: anyone can add their own email once (doc ID = the email, lowercase); only the team can read it.
     match /waitlist/{email} {
-      allow create: if request.resource.data.keys().hasOnly(['email', 'source', 'at'])
+      allow create: if request.resource.data.keys().hasOnly(['email', 'source', 'at', 'phone'])
+        && (!('phone' in request.resource.data) || (request.resource.data.phone is string && request.resource.data.phone.size() <= 30))
         && request.resource.data.email == email
         && email.size() <= 200
         && email.matches('^[^@\\s/]+@[^@\\s/]+[.][^@\\s/]+$')
         && request.resource.data.source is string
         && request.resource.data.source.size() <= 60
+        && request.resource.data.at == request.time;
+      allow read: if isAdmin();
+    }
+
+    // Feedback form (/feedback): anyone can send one response; only the team can read them.
+    match /feedback/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['answers', 'at'])
+        && request.resource.data.answers is map
+        && request.resource.data.answers.size() <= 40
         && request.resource.data.at == request.time;
       allow read: if isAdmin();
     }
