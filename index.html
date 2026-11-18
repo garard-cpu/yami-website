@@ -407,6 +407,17 @@ html,body{overflow-x:clip}
 .ypop .btn{width:100%}
 .ypop .perr{color:var(--red);font-weight:700;font-size:14px}
 .ypop .pno{background:none;border:0;color:var(--muted);font:600 14px/1 var(--body);margin-top:12px;cursor:pointer;text-decoration:underline}
+.journey{padding:72px 0 24px}
+.journey .sec-h p{max-width:560px;margin:14px auto 0;color:var(--muted)}
+.jsteps{list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:none}
+.jsteps li{position:relative;background:var(--paper);border:var(--line);border-radius:22px;box-shadow:5px 5px 0 var(--ink);padding:24px 20px 20px}
+.jsteps li b{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--gold);border:2.5px solid var(--ink);font:800 22px/1 var(--display);margin-bottom:12px}
+.jsteps li h3{font-size:26px;color:var(--red);margin-bottom:8px}
+.jsteps li p{margin:0 0 14px;font-size:15.5px}
+.jsteps .jtag{display:inline-block;font:700 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:6px 10px}
+.jsteps li:not(:last-child)::after{content:"→";position:absolute;right:-16px;top:50%;transform:translateY(-50%);font:800 20px/1 var(--display);color:var(--red);z-index:2}
+@media (max-width:900px){.jsteps{grid-template-columns:1fr 1fr}.jsteps li::after{display:none}}
+@media (max-width:560px){.jsteps{grid-template-columns:1fr}}
 </style>
 
 <div class="ypop" id="ypop" role="dialog" aria-modal="true" aria-labelledby="ypop-t">
@@ -453,7 +464,7 @@ html,body{overflow-x:clip}
         <span class="scan" aria-hidden="true">reading <em id="spotname">taco-taco</em></span>
       </div>
       <h1>meet yami.<br><span>eat well at usc.</span></h1>
-      <p class="lead">Your AI nutritionist that scrapes all the menus on campus to help you eat better, and also creates your grocery list.</p>
+      <p class="lead">Tell Yami your goal. Yami tells you what to eat, at TCC, the Village or the grocery store, using the real menus on campus.</p>
       <div class="signup"><a class="btn red" href="/app/">open yami</a></div>
     </div>
     <div class="hero-vis">
@@ -504,11 +515,24 @@ html,body{overflow-x:clip}
   <span>tutor campus center</span><span>usc village</span><span>trader joe's</span><span>c&amp;g juice co.</span><span>panda express</span><span>seeds marketplace</span><span>trojan grounds</span><span>cava</span><span>sweetgreen</span><span>target usc village</span>
 </div></div>
 
+<section class="journey" id="how">
+  <div class="wrap">
+    <div class="sec-h"><span class="eyebrow">how yami works</span><h2>one goal. four simple steps.</h2>
+      <p>Yami has one job: help you eat for your goal at USC. Everything in the app is a step toward that.</p></div>
+    <ol class="jsteps">
+      <li><b>1</b><h3>set your goal.</h3><p>Answer a 1-minute survey: more energy, more protein, eating healthier or saving money.</p><span class="jtag">onboarding</span></li>
+      <li><b>2</b><h3>snap what you eat.</h3><p>Take a photo of your plate. Yami shows how it fits your goal and one easy change for next time.</p><span class="jtag">snap your plate</span></li>
+      <li><b>3</b><h3>know what to eat next.</h3><p>Hungry? Yami picks a meal on or off campus. Shopping? It builds your grocery list on budget.</p><span class="jtag">order smart · groceries</span></li>
+      <li><b>4</b><h3>make it a habit.</h3><p>See your progress, one habit for today and your streak. Small wins, every day.</p><span class="jtag">dashboard · badges</span></li>
+    </ol>
+  </div>
+</section>
+
 <section id="features">
   <div class="wrap">
     <div class="sec-h">
-      <span class="eyebrow">what does yami include?</span>
-      <h2>swipe through yami.</h2>
+      <span class="eyebrow">see it in action</span>
+      <h2>watch yami work.</h2>
     </div>
     <div class="car" id="car">
       <div class="car-phone">
@@ -539,7 +563,7 @@ html,body{overflow-x:clip}
 </section>
 
 <section class="sfh" id="special">
-  <div class="wrap"><div class="sec-h"><span class="eyebrow">special features</span><h2>made for eating at usc.</h2></div></div>
+  <div class="wrap"><div class="sec-h"><span class="eyebrow">step 3, up close</span><h2>yami tells you what to eat next.</h2></div></div>
 </section>
 
 <section class="gshow" id="groceries">
