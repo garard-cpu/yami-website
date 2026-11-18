@@ -453,6 +453,13 @@ html,body{overflow-x:clip}
 .dshot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 @media (max-width:900px){.dcards{grid-template-columns:1fr}}
 @media (max-width:520px){.dcard{flex-direction:column}.dshot{flex:none;width:100%;height:300px}}
+.dlead{font:800 18px/1 var(--display)!important;margin:0 0 8px!important}
+.dlist{margin:0 0 14px;padding-left:20px;font-size:15.5px}.dlist li{margin-bottom:4px}
+.dres{background:#fff;border:2.5px solid var(--ink);border-radius:16px;padding:12px 14px;margin-bottom:16px;box-shadow:3px 3px 0 var(--ink)}
+.dres>b{display:block;font:800 18px/1.1 var(--display)}.dres>i{font:700 11px/1.4 var(--mono);font-style:normal;color:var(--muted);text-transform:uppercase}
+.dres .mnu{grid-template-columns:repeat(3,1fr);margin-top:10px}
+.mnu{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.mnu span{background:var(--cream);border:2px solid var(--ink);border-radius:10px;padding:6px 4px;text-align:center;font:600 10.5px/1.2 var(--mono);color:var(--muted)}.mnu b{display:block;font:800 16px/1.1 var(--display);color:var(--ink)}
+.dex span:last-child{background:var(--cream)!important}
 </style>
 
 <div class="ypop" id="ypop" role="dialog" aria-modal="true" aria-labelledby="ypop-t">
@@ -556,15 +563,18 @@ html,body{overflow-x:clip}
     <div class="dcards">
       <a class="dcard" href="#ordersmart">
         <div class="dtxt"><span class="dnum">1</span><h3>order smart.</h3>
-          <p>Tell Yami how you feel and your budget. It picks real meals from TCC, the Village and spots near campus.</p>
-          <div class="dex"><span>"high protein after the gym"</span><span>$20</span><span>&#8594; breakfast sandwich, 33g protein</span></div>
+          <p class="dlead">chat with yami:</p>
+          <ul class="dlist"><li>Tell it what you're in the mood for.</li><li>Set your budget.</li><li>Yami searches what you can order on and around campus, with prices, for your goal.</li></ul>
+          <div class="dex"><span>"high protein after the gym"</span><span>$20 budget</span></div>
+          <div class="dres"><b>Breakfast Sandwich</b><i>Seeds Marketplace · TCC</i><div class="mnu"><span><b>33g</b>protein</span><span><b>580</b>cal</span><span><b>~$10.50</b>price</span></div></div>
           <span class="dmore">see order smart &#8595;</span></div>
         <div class="dshot"><img src="/os-shot.jpg" alt="Yami order smart picking a high protein breakfast sandwich at TCC" loading="lazy"></div>
       </a>
       <a class="dcard" href="#groceries">
         <div class="dtxt"><span class="dnum">2</span><h3>groceries, on budget.</h3>
-          <p>Pick your store. Yami builds your grocery list for your goal, with real brands, prices and macros.</p>
-          <div class="dex"><span>Target USC Village</span><span>lean protein</span><span>&#8594; chicken breast, 25g protein, $5.99</span></div>
+          <ul class="dlist"><li>Pick your store on or around campus.</li><li>Yami walks you through each macronutrient, one step at a time.</li><li>Every pick shows real brands, prices and macros.</li></ul>
+          <div class="dex"><span>Target USC Village</span><span>step 2: lean protein</span></div>
+          <div class="dres"><b>Chicken Breast, 1 lb</b><i>Target USC Village</i><div class="mnu"><span><b>25g</b>protein / 4 oz</span><span><b>0g</b>carbs</span><span><b>$5.99</b>price</span></div></div>
           <span class="dmore">see groceries &#8595;</span></div>
         <div class="dshot"><img src="/groc-shot.jpg" alt="Yami building a grocery list with prices at Target USC Village" loading="lazy"></div>
       </a>
