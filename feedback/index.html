@@ -55,22 +55,22 @@ textarea{min-height:110px}
 const Q = [
   { id:"intro", type:"intro" },
   { id:"onboarding", tag:"getting started", title:"how did <em>signing up</em> feel?", sub:"the quick setup survey when you first opened yami.", type:"one",
-    opts:[["😍","smooth and quick"],["🙂","fine, a little long"],["😕","confusing"],["🤷","didn't get that far"]] },
+    opts:[["🍓","smooth and quick"],["🥪","fine, a little long"],["🌶️","confusing"],["🥡","didn't get that far"]] },
   { id:"tried", tag:"features", title:"what did you <em>try</em>?", sub:"tap all that apply.", type:"many",
-    opts:[["📸","snap your plate"],["🛒","groceries"],["✨","order smart"],["📊","dashboard"]] },
+    opts:[["🍽️","snap your plate"],["🛒","groceries"],["🥡","order smart"],["🥗","dashboard"]] },
   { id:"snap", tag:"snap your plate", title:"did the scan get your <em>plate</em> right?", type:"one", skipUnless:"snap your plate",
-    opts:[["🎯","spot on"],["👌","pretty close"],["😬","way off"]] },
+    opts:[["🥑","spot on"],["🍌","pretty close"],["🧂","way off"]] },
   { id:"order", tag:"order smart", title:"would you actually <em>order</em> what it picked?", type:"one", skipUnless:"order smart",
-    opts:[["🙌","yes, totally"],["🤔","maybe"],["🙅","no"]] },
+    opts:[["🌯","yes, totally"],["🥗","maybe"],["🧊","no"]] },
   { id:"groceries", tag:"groceries", title:"would you <em>shop</em> with that list?", type:"one", skipUnless:"groceries",
-    opts:[["🛍️","yes"],["🤔","maybe"],["🙅","no"]] },
+    opts:[["🥦","yes"],["🍠","maybe"],["🧊","no"]] },
   { id:"dashboard", tag:"dashboard", title:"was your <em>dashboard</em> useful?", type:"one", skipUnless:"dashboard",
-    opts:[["💡","yes, it helped"],["😐","it was okay"],["❓","didn't get it"]] },
+    opts:[["🍯","yes, it helped"],["🍞","it was okay"],["🥄","didn't get it"]] },
   { id:"fav", tag:"favorite", title:"your <em>favorite</em> part?", type:"one",
-    opts:[["📸","snap your plate"],["🛒","groceries"],["✨","order smart"],["📊","dashboard"]] },
+    opts:[["🍽️","snap your plate"],["🛒","groceries"],["🥡","order smart"],["🥗","dashboard"]] },
   { id:"confused", tag:"be honest", title:"one thing that <em>confused</em> you?", sub:"or anything that didn't work. optional.", type:"text", ph:"the part where..." },
   { id:"keep", tag:"the big one", title:"would you keep <em>using</em> yami?", type:"scale",
-    opts:[["😴","nah"],["🤔","maybe"],["🙂","probably"],["🤩","yes!"]] },
+    opts:[["🥚","nah"],["🍳","maybe"],["🥞","probably"],["🍓","yes!"]] },
   { id:"wish", tag:"dream feature", title:"what would make yami a <em>must-have</em>?", sub:"optional.", type:"text", ph:"i wish yami could..." },
   { id:"email", tag:"last one", title:"want <em>early access</em> to the app store version?", sub:"leave your email. optional.", type:"email" },
   { id:"done", type:"done" },
@@ -90,12 +90,12 @@ function render() {
   document.getElementById("count").textContent = q.type === "intro" ? "1 min" : q.type === "done" ? "done!" : `${pos + 1} / ${real.length}`;
 
   if (q.type === "intro") {
-    card.innerHTML = `<div class="big">🍽️</div><span class="tag">quick check-in</span>
+    card.innerHTML = `<div class="big">🥣</div><span class="tag">quick check-in</span>
       <h1>tell us what you <em>think</em> of yami.</h1>
       <p class="sub">about 1 minute. mostly taps. good or bad, it all helps us build yami for usc.</p>
       <div class="row"><span></span><button class="btn red" id="next">let's go</button></div>`;
   } else if (q.type === "done") {
-    card.innerHTML = `<div class="big">💛</div><span class="tag">thank you</span>
+    card.innerHTML = `<div class="big">🍓</div><span class="tag">thank you</span>
       <h1>you just helped build <em>yami</em>.</h1>
       <p class="sub">we read every answer. go snap your next meal!</p>
       <div class="row"><span></span><a class="btn red" href="/app/">open yami</a></div>`;
