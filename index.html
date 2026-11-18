@@ -462,6 +462,12 @@ html,body{overflow-x:clip}
 .dex span:last-child{background:var(--cream)!important}
 .dex.dgot span{background:var(--gold)!important}
 .dex+.dgot{margin-top:-6px}
+.dcards{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dcard,.dtxt{min-width:0}
+.dex span{white-space:normal;overflow-wrap:anywhere}
+.ddemo{margin-top:auto;padding-top:8px;font:800 16px/1 var(--display);color:var(--red)}
+@media (max-width:900px){.dcards{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1100px) and (min-width:901px){.dshot{flex-basis:140px;height:290px}}
 </style>
 
 <div class="ypop" id="ypop" role="dialog" aria-modal="true" aria-labelledby="ypop-t">
@@ -563,19 +569,19 @@ html,body{overflow-x:clip}
   <div class="wrap">
     <div class="sec-h"><span class="eyebrow">only on yami</span><h2>two things no other nutrition app does.</h2></div>
     <div class="dcards">
-      <a class="dcard" href="#groceries">
+      <a class="dcard" href="#features" data-jump="1">
         <div class="dtxt"><span class="dnum">1</span><h3>groceries, on budget.</h3>
           <ul class="dlist"><li>Pick your store on or around campus.</li><li>Yami walks you through each macronutrient, one step at a time.</li><li>Every pick shows real brands, prices and macros.</li><li>Log your receipt. Yami tells you if you're over budget.</li></ul>
           <div class="dex"><span>Target USC Village</span><span>step 2: lean protein</span></div>
-          <div class="dex dgot"><span>Smart Chicken organic breast · Target</span><span>25g protein / 4 oz</span><span>$10.99 / lb</span></div></div>
+          <div class="dex dgot"><span>Smart Chicken organic breast · Target</span><span>25g protein / 4 oz</span><span>$10.99 / lb</span></div><span class="ddemo">see demo &#8594;</span></div>
         <div class="dshot"><img src="/groc-shot.jpg" alt="Yami building a grocery list with prices at Target USC Village" loading="lazy"></div>
       </a>
-      <a class="dcard" href="#ordersmart">
+      <a class="dcard" href="#features" data-jump="2">
         <div class="dtxt"><span class="dnum">2</span><h3>order smart, on budget.</h3>
           <p class="dlead">chat with yami:</p>
           <ul class="dlist"><li>Tell it what you're in the mood for.</li><li>Set your budget.</li><li>Yami searches what you can order on and around campus, with prices, for your goal.</li></ul>
           <div class="dex"><span>"high protein after the gym"</span><span>$20 budget</span></div>
-          <div class="dex dgot"><span>breakfast sandwich · Seeds, TCC</span><span>33g protein</span><span>580 cal</span><span>~$10.50</span></div></div>
+          <div class="dex dgot"><span>breakfast sandwich · Seeds, TCC</span><span>33g protein</span><span>580 cal</span><span>~$10.50</span></div><span class="ddemo">see demo &#8594;</span></div>
         <div class="dshot"><img src="/os-shot.jpg" alt="Yami order smart picking a high protein breakfast sandwich at TCC" loading="lazy"></div>
       </a>
     </div>
