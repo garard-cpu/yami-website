@@ -60,6 +60,9 @@
       <tbody id="rows"></tbody>
     </table></div>
 
+    <div id="fb" hidden style="margin-top:36px"><h1>feedback</h1>
+      <div class="stat"><b id="fb-n">0</b><span>responses</span></div>
+      <div class="bar"><button type="button" id="fbcsv">Download feedback (CSV)</button></div></div>
     <h1 style="margin-top:36px">waitlist</h1>
     <p>Emails from the homepage sign-up form.</p>
     <div class="stats">
@@ -174,6 +177,13 @@ async function main() {
       const snap = await F.getDocs(F.collection(db, "directory"));
       people = snap.docs.map((d) => d.data()).sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
       try {
+        try {
+          const fs = await F.getDocs(F.collection(db, "feedback"));
+          window.yamiFeedback = fs.docs.map((d) => { const f = d.data(); return { ...(f.answers || {}), at: f.at && f.at.toMillis ? new Date(f.at.toMillis()).toISOString().slice(0, 10) : "" }; });
+          const fb = document.getElementById("fb");
+          fb.hidden = false;
+          document.getElementById("fb-n").textContent = window.yamiFeedback.length;
+        } catch {}
         const ws = await F.getDocs(F.collection(db, "waitlist"));
         waitlist = ws.docs.map((d) => { const w = d.data(); return { ...w, at: w.at && w.at.toMillis ? w.at.toMillis() : 0 }; })
           .sort((a, b) => b.at - a.at);
@@ -187,6 +197,18 @@ async function main() {
   });
 }
 main().catch((e) => showErr("Couldn't load. " + e.message));
+</script>
+<script>
+document.getElementById("fbcsv").onclick = () => {
+  const rows = window.yamiFeedback || [];
+  const cols = ["at","from","onboarding","tried","snap","order","groceries","dashboard","fav","confused","keep","wish","email"];
+  const cell = (v) => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const csv = [cols.join(",")].concat(rows.map((r) => cols.map((c) => cell(r[c])).join(","))).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = "yami-feedback-" + new Date().toISOString().slice(0, 10) + ".csv";
+  a.click();
+};
 </script>
 </body>
 </html>

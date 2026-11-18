@@ -27,6 +27,15 @@ service cloud.firestore {
       allow read: if isAdmin();
     }
 
+    // Feedback form (/feedback): anyone can send one response; only the team can read them.
+    match /feedback/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['answers', 'at'])
+        && request.resource.data.answers is map
+        && request.resource.data.answers.size() <= 20
+        && request.resource.data.at == request.time;
+      allow read: if isAdmin();
+    }
+
     // The sign-up list: email, join date, last active, email-updates choice. No profiles or meals.
     match /directory/{uid} {
       allow write: if request.auth != null && request.auth.uid == uid;
