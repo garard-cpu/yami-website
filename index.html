@@ -378,6 +378,12 @@ html,body{overflow-x:clip}
 .ix .sign span{padding:7px;font-size:11px}
 .isteps{flex:1;min-width:0;max-width:300px}
 @media (max-width:860px){.inst .stage{gap:10px}.isteps{width:auto;flex:1;min-width:0}.isteps li{font-size:12.5px;padding:7px 9px}.isteps i{width:20px;height:20px;font-size:11px}}
+.sfh{padding:50px 0 0}
+.gshow.flip .wrap{grid-template-columns:1fr 1.05fr}
+.gshow.flip .hero-vis{order:2}
+@media (max-width:860px){.gshow.flip .wrap{grid-template-columns:1fr}.gshow.flip .hero-vis{order:2}.osp .ch.g1{left:-6px}}
+.gshow .phone .mascot{right:-8px;top:-46px;width:92px}
+@media (max-width:860px){.phone .mascot{right:-6px;width:84px}}
 </style>
 <script src="/app/firebase-config.js"></script>
 </head>
@@ -492,6 +498,10 @@ html,body{overflow-x:clip}
   </div>
 </section>
 
+<section class="sfh" id="special">
+  <div class="wrap"><div class="sec-h"><span class="eyebrow">special features</span><h2>made for eating at usc.</h2></div></div>
+</section>
+
 <section class="gshow" id="groceries">
   <div class="wrap">
     <div class="hero-vis">
@@ -527,6 +537,42 @@ html,body{overflow-x:clip}
     </div>
   </div>
 </section>
+
+<section class="gshow flip" id="ordersmart">
+  <div class="wrap">
+    <div class="hero-vis">
+      <div class="duo">
+        <div class="phone ph-scan">
+          <div class="screen"><img src="/os-shot.jpg" alt="Yami Order Smart asking what you are in the mood for, with a $20 budget and quick picks like high protein after the gym." loading="lazy"></div>
+        </div>
+        <svg class="loop" viewBox="0 0 150 90" aria-hidden="true"><path d="M4 70 C 40 78, 62 60, 66 40 C 70 14, 46 10, 46 30 C 46 52, 80 66, 136 50" fill="none" stroke="#2B1E1A" stroke-width="3" stroke-linecap="round"/><path d="M124 40 L138 50 L124 60" fill="none" stroke="#2B1E1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="phone ph-res">
+          <img class="mascot" src="/yami-trojan.svg" alt="">
+          <div class="screen gc">
+            <div class="gc-hd"><small>on campus · high protein after the gym</small><b>3 picks for you!</b></div>
+            <div class="gc-win"><ul class="gc-list"><li><div class="gr1"><b>Breakfast Sandwich</b><em>~$10.50</em></div><small>seeds marketplace · tcc</small><div class="gmx"><i>within your $20</i><u>580 cal</u><u>33g protein</u><u>3g fiber</u></div></li><li><div class="gr1"><b>Greek Salad Bowl</b><em>~$13</em></div><small>cava · usc village</small><div class="gmx"><i>within your $20</i><u>580 cal</u><u>37g protein</u><u>8g fiber</u></div></li><li><div class="gr1"><b>Harvest Bowl</b><em>~$13</em></div><small>sweetgreen · usc village</small><div class="gmx"><i>within your $20</i><u>760 cal</u><u>40g protein</u><u>10g fiber</u></div></li></ul></div>
+            <div class="gc-tot"><span>your budget</span><b>$20</b></div>
+            <div class="gc-bud">every pick fits your budget</div>
+          </div>
+          <span class="ch g1">real menus<b>near usc</b></span>
+          <div class="tag">matched to your goals</div>
+        </div>
+      </div>
+      <p class="est">Picks and prices come from real menus on and around campus. Prices are estimates.</p>
+    </div>
+    <div class="gtx">
+      <span class="eyebrow">order smart</span>
+      <h2>craving something? order smart.</h2>
+      <p class="lead">Tell Yami how you feel and your budget. It picks healthy options from real menus on and around campus.</p>
+      <ol class="gsteps">
+        <li><span><b>tell yami your mood.</b> Something light, or high protein after the gym.</span></li>
+        <li><span><b>set your budget.</b> Every pick stays within it.</span></li>
+        <li><span><b>get real picks.</b> Seeds at TCC, CAVA and sweetgreen at the Village, and more.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
 
 <section class="why">
   <div class="wrap">
