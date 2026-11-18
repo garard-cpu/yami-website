@@ -71,7 +71,7 @@
     </div>
     <div class="bar"><button type="button" id="wcsv">Download waitlist (CSV)</button></div>
     <div class="wrap"><table>
-      <thead><tr><th>Email</th><th>Joined</th><th>From</th></tr></thead>
+      <thead><tr><th>Email</th><th>Phone</th><th>Joined</th><th>From</th></tr></thead>
       <tbody id="wrows"></tbody>
     </table></div>
   </section>
@@ -115,7 +115,7 @@ function render() {
   $("w-week").textContent = waitlist.filter((w) => now - (w.at || 0) < WEEK).length;
   for (const w of waitlist) {
     const tr = document.createElement("tr");
-    [w.email, day(w.at), w.source || ""].forEach((v) => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
+    [w.email, w.phone || "", day(w.at), w.source || ""].forEach((v) => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
     wrows.appendChild(tr);
   }
   $("list").hidden = false;
@@ -123,8 +123,8 @@ function render() {
 
 function wcsv() {
   const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const lines = [["email", "joined", "from"].join(",")];
-  for (const w of waitlist) lines.push([w.email, day(w.at), w.source].map(cell).join(","));
+  const lines = [["email", "phone", "joined", "from"].join(",")];
+  for (const w of waitlist) lines.push([w.email, w.phone, day(w.at), w.source].map(cell).join(","));
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
   a.download = `yami-waitlist-${new Date().toISOString().slice(0, 10)}.csv`;

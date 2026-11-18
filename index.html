@@ -393,7 +393,40 @@ html,body{overflow-x:clip}
 #install h2{font-size:clamp(30px,6vw,56px);overflow-wrap:break-word}
 @media (max-width:860px){#install .stage{flex-direction:column;gap:18px}#install .isteps{width:100%;max-width:420px}#install .isteps li{font-size:15px;padding:9px 12px}}
 .car-list{display:none!important}
+.ypop{position:fixed;inset:0;z-index:100;background:rgba(43,30,26,.45);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.ypop.on{opacity:1;pointer-events:auto}
+.ypop .pcard{position:relative;width:100%;max-width:400px;background:var(--paper);border:var(--line);border-radius:26px;box-shadow:6px 6px 0 var(--ink);padding:28px 22px 18px;text-align:center;transform:translateY(16px);transition:transform .3s}
+.ypop.on .pcard{transform:none}
+.ypop .px{position:absolute;top:10px;right:12px;background:none;border:0;font-size:28px;line-height:1;cursor:pointer;color:var(--ink)}
+.ypop .pbig{font-size:48px;line-height:1;margin-bottom:8px}
+.ypop .peye{font:700 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--red)}
+.ypop h3{font-size:34px;color:var(--red);margin:8px 0 6px}
+.ypop p{color:var(--muted);margin:0 0 16px;font-size:15px}
+.ypop form{display:grid;gap:10px}
+.ypop input{width:100%;border:var(--line);border-radius:14px;padding:13px 14px;font:500 16px/1.2 var(--body);background:#fff;color:var(--ink)}
+.ypop .btn{width:100%}
+.ypop .perr{color:var(--red);font-weight:700;font-size:14px}
+.ypop .pno{background:none;border:0;color:var(--muted);font:600 14px/1 var(--body);margin-top:12px;cursor:pointer;text-decoration:underline}
 </style>
+
+<div class="ypop" id="ypop" role="dialog" aria-modal="true" aria-labelledby="ypop-t">
+  <div class="pcard">
+    <button class="px" type="button" data-close aria-label="Close">&times;</button>
+    <div class="pbody">
+      <div class="pbig">🥣</div>
+      <span class="peye">welcome to yami</span>
+      <h3 id="ypop-t">get early access.</h3>
+      <p>be first on the app store in january, plus new usc food finds.</p>
+      <form novalidate>
+        <input type="email" name="email" placeholder="you@usc.edu" autocomplete="email" required>
+        <input type="tel" name="phone" placeholder="phone number (optional)" autocomplete="tel" inputmode="tel">
+        <div class="perr" hidden></div>
+        <button class="btn red" type="submit">i'm in</button>
+      </form>
+      <button class="pno" type="button" data-close>maybe later</button>
+    </div>
+  </div>
+</div>
 <script src="/app/firebase-config.js"></script>
 </head>
 <body>
@@ -699,17 +732,38 @@ html,body{overflow-x:clip}
   function get(){try{return localStorage.getItem(K)}catch(e){return null}}
   function set(v){try{localStorage.setItem(K,v)}catch(e){}}
   function ok(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
-  function send(email,src){
+  function send(email,src,phone){
     // Live site: the "waitlist" collection in Yami's Firebase (one doc per email; the team sees it on /app/users.html).
-    try{var F=window.YAMI_FIREBASE||{},P=F.projectId,e=String(email).trim().toLowerCase();if(P&&F.apiKey){var D='projects/'+P+'/databases/(default)/documents';fetch('https://firestore.googleapis.com/v1/'+D+':commit?key='+encodeURIComponent(F.apiKey),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{update:{name:D+'/waitlist/'+e,fields:{email:{stringValue:e},source:{stringValue:String(src||'').slice(0,60)}}},updateTransforms:[{fieldPath:'at',setToServerValue:'REQUEST_TIME'}],currentDocument:{exists:false}}]})}).catch(function(){})}}catch(err){}
+    try{var F=window.YAMI_FIREBASE||{},P=F.projectId,e=String(email).trim().toLowerCase();if(P&&F.apiKey){var D='projects/'+P+'/databases/(default)/documents';fetch('https://firestore.googleapis.com/v1/'+D+':commit?key='+encodeURIComponent(F.apiKey),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{update:{name:D+'/waitlist/'+e,fields:Object.assign({email:{stringValue:e},source:{stringValue:String(src||'').slice(0,60)}},phone?{phone:{stringValue:String(phone).slice(0,30)}}:{})},updateTransforms:[{fieldPath:'at',setToServerValue:'REQUEST_TIME'}],currentDocument:{exists:false}}]})}).catch(function(){})}}catch(err){}
     // On claude.ai: the page's private sign-up list, which the team exports to the Excel sheet.
-    (async function(){try{if(!window.claude||!window.claude.use)return;var db=await window.claude.use('db'),u=await window.claude.use('user');if(!db||!u)return;var id=await u.id();if(!id)return;await db.collection('signups').doc(String(id)).set({email:email,source:src||'',at:new Date().toISOString()})}catch(e){}})();
+    (async function(){try{if(!window.claude||!window.claude.use)return;var db=await window.claude.use('db'),u=await window.claude.use('user');if(!db||!u)return;var id=await u.id();if(!id)return;await db.collection('signups').doc(String(id)).set({email:email,phone:phone||'',source:src||'',at:new Date().toISOString()})}catch(e){}})();
   }
   function joined(email){
     set(email);
     document.querySelectorAll('[data-signup]').forEach(function(f){var p=f.parentElement;p.classList.add('joined');var i=f.querySelector('input[type=email]');if(i){i.value=email}var b=f.querySelector('button');if(b){b.textContent="you're in"}});
   }
   document.querySelectorAll('[data-signup]').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var v=f.querySelector('input[type=email]').value.trim();if(!ok(v))return;send(v,f.getAttribute('data-src'));joined(v)})});
+  // Welcome pop-up: asks for email and phone once per visitor, a few seconds after they arrive.
+  (function(){
+    var m=document.getElementById('ypop');if(!m)return;
+    var seen;try{seen=localStorage.getItem('yami-pop-seen')}catch(e){}
+    if(get()||seen)return;
+    function close(){m.classList.remove('on');try{localStorage.setItem('yami-pop-seen','1')}catch(e){}}
+    setTimeout(function(){m.classList.add('on')},4000);
+    m.querySelectorAll('[data-close]').forEach(function(b){b.onclick=close});
+    m.addEventListener('click',function(e){if(e.target===m)close()});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+    var f=m.querySelector('form');
+    f.addEventListener('submit',function(e){e.preventDefault();
+      var v=f.email.value.trim(),ph=f.phone.value.replace(/[^\d+]/g,'');
+      var er=m.querySelector('.perr');
+      if(!ok(v)){er.textContent="that email doesn't look right.";er.hidden=false;return}
+      if(ph&&ph.replace(/\D/g,'').length<10){er.textContent="add your full number, or leave it blank.";er.hidden=false;return}
+      send(v,'popup',ph);joined(v);
+      m.querySelector('.pbody').innerHTML='<div class="pbig">🍓</div><h3>you\'re in!</h3><p>we\'ll text you when yami hits the app store in january.</p><a class="btn red" href="/app/">open yami</a>';
+      try{localStorage.setItem('yami-pop-seen','1')}catch(e){}
+    });
+  })();
 
   (function(){var tr=document.getElementById('track');if(!tr)return;var N=4,cur=0,cards=document.querySelectorAll('.fcard'),dots=document.querySelectorAll('.dots button');
   var vids=tr.querySelectorAll('.car-slide');var seen=false;function vplay(){vids.forEach(function(sl,k){var v=sl.querySelector('video');if(!v)return;if(k===cur&&seen){if(v.paused){v.currentTime=0;var p=v.play();p&&p.catch&&p.catch(function(){})}}else v.pause()})}
