@@ -733,7 +733,7 @@ html,body{overflow-x:clip}
   function ok(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
   function send(email,src,phone){
     // Google Sheet (Yami Feedback + Sign-ups > Sign-ups tab): every sign-up, with phone if given.
-    try{fetch('https://script.google.com/macros/s/AKfycbzO5p-JsMvPEA7UCwNUWDwntpWNsYpiB-LYvA_8rwBbhzEQgSCxB2c4cB8jZsRAT7sZ/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({kind:'signup',email:String(email).trim().toLowerCase(),phone:phone||'',source:src||''})})}catch(err){}
+    try{fetch('https://script.google.com/macros/s/AKfycbzO5p-JsMvPEA7UCwNUWDwntpWNsYpiB-LYvA_8rwBbhzEQgSCxB2c4cB8jZsRAT7sZ/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({kind:'signup',email:String(email).trim().toLowerCase(),phone:phone?'tel '+phone:'',source:src||''})})}catch(err){}
     // Live site: the "waitlist" collection in Yami's Firebase (one doc per email; the team sees it on /app/users.html).
     try{var F=window.YAMI_FIREBASE||{},P=F.projectId,e=String(email).trim().toLowerCase();if(P&&F.apiKey){var D='projects/'+P+'/databases/(default)/documents';fetch('https://firestore.googleapis.com/v1/'+D+':commit?key='+encodeURIComponent(F.apiKey),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{update:{name:D+'/waitlist/'+e,fields:Object.assign({email:{stringValue:e},source:{stringValue:String(src||'').slice(0,60)}},phone?{phone:{stringValue:String(phone).slice(0,30)}}:{})},updateTransforms:[{fieldPath:'at',setToServerValue:'REQUEST_TIME'}],currentDocument:{exists:false}}]})}).catch(function(){})}}catch(err){}
     // On claude.ai: the page's private sign-up list, which the team exports to the Excel sheet.
