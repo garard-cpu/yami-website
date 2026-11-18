@@ -202,7 +202,7 @@ main().catch((e) => showErr("Couldn't load. " + e.message));
 document.getElementById("fbcsv").onclick = () => {
   const rows = window.yamiFeedback || [];
   const base = ["why","onboarding","tried","snaps","forgot","snap","order","groceries","dashboard","fav","keep"];
-  const cols = ["at","from"].concat(...base.map((c) => [c, c + "_wish"]), ["email"]);
+  const cols = ["at","from"].concat(...base.map((c) => [c, c + "_wish"]), ["next", "email"]);
   const cell = (v) => '"' + String(v ?? "").replace(/"/g, '""') + '"';
   const csv = [cols.join(",")].concat(rows.map((r) => cols.map((c) => cell(r[c])).join(","))).join("\n");
   const a = document.createElement("a");
