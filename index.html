@@ -384,6 +384,14 @@ html,body{overflow-x:clip}
 @media (max-width:860px){.gshow.flip .wrap{grid-template-columns:1fr}.gshow.flip .hero-vis{order:2}.osp .ch.g1{left:-6px}}
 .gshow .phone .mascot{right:-8px;top:-46px;width:92px}
 @media (max-width:860px){.phone .mascot{right:-6px;width:84px}}
+#install .stage{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:24px;max-width:640px;margin:0 auto}
+#install .stage>.phone{width:240px!important;min-width:0;max-width:240px!important;flex:0 0 240px}
+#install .ix .home{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#install .ix .home i,#install .ix .home .ya{min-width:0}
+#install .isteps{flex:1 1 auto;min-width:0;max-width:320px}
+#install .isteps li{overflow-wrap:anywhere}
+#install h2{font-size:clamp(30px,6vw,56px);overflow-wrap:break-word}
+@media (max-width:860px){#install .stage{flex-direction:column;gap:18px}#install .isteps{width:100%;max-width:420px}#install .isteps li{font-size:15px;padding:9px 12px}}
 </style>
 <script src="/app/firebase-config.js"></script>
 </head>
