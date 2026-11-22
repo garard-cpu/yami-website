@@ -26,6 +26,7 @@
     <title>Yami</title>
     <script src="/app/firebase-config.js"></script>
     <script type="module" src="/app/account.js"></script>
+    <script type="module" src="/app/analytics.js"></script>
     <script>setTimeout(function(){if(window.__yamiAcct||window.__yamiStarted)return;window.__yamiStarted=true;var m=document.createElement("script");m.type="module";m.textContent=document.getElementById("yami-app").textContent;document.body.appendChild(m)},8000)</script>
     <script type="text/yami-app" id="yami-app">(function(){const c=document.createElement("link").relList;if(c&&c.supports&&c.supports("modulepreload"))return;for(const g of document.querySelectorAll('link[rel="modulepreload"]'))u(g);new MutationObserver(g=>{for(const y of g)if(y.type==="childList")for(const v of y.addedNodes)v.tagName==="LINK"&&v.rel==="modulepreload"&&u(v)}).observe(document,{childList:!0,subtree:!0});function d(g){const y={};return g.integrity&&(y.integrity=g.integrity),g.referrerPolicy&&(y.referrerPolicy=g.referrerPolicy),g.crossOrigin==="use-credentials"?y.credentials="include":g.crossOrigin==="anonymous"?y.credentials="omit":y.credentials="same-origin",y}function u(g){if(g.ep)return;g.ep=!0;const y=d(g);fetch(g.href,y)}})();var Kc={exports:{}},To={};/**
  * @license React
