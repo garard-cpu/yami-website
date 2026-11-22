@@ -15,7 +15,7 @@
 // To turn it on: paste the project key from PostHog (Settings > Project > Project API key, starts with "phc_") below.
 // While KEY is empty this file does nothing.
 
-const KEY = "";
+const KEY = "phc_kqzyNWL3DvtVudHb85bCVUgrCScRmPT8Q7uqV8Kw7uPa";
 const HOST = "https://us.i.posthog.com"; // use https://eu.i.posthog.com if the PostHog project is in the EU
 
 const FEATURES = { Home: "home", Groceries: "groceries", "Order Smart": "order_smart", Dashboard: "dashboard", "Log a meal": "snap" };
