@@ -7,6 +7,7 @@ window.YAMI_FIREBASE = {
   authDomain: "yami-80e44.firebaseapp.com",
   projectId: "yami-80e44",
   appId: "1:130177012338:web:914f4f21fd1ffee25028eb",
+  measurementId: "", // Google Analytics ID (G-...) from Project settings > General > Your apps; empty = no usage stats
   google: true, // turn on Google in Firebase console > Authentication > Sign-in method
   apple: false, // set to true once Sign in with Apple is set up (needs the Apple Developer account)
 };

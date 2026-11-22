@@ -15,6 +15,9 @@
 
 window.__yamiAcct = true;
 
+// Usage stats (which screens people use and for how long); see app/analytics.js.
+{ const a = document.createElement("script"); a.src = "/app/analytics.js"; a.defer = true; document.head.appendChild(a); }
+
 // Saved per account as strings in users/{uid}.extras (the app writes these itself; badges, food-name fixes, usual foods).
 const EXTRA = ["yami-badges", "yami-fixes", "yami-usuals", "yami-groc-log", "yami-meal-recs", "yami-campus-plates", "yami-os-budget", "yami-ideas"];
 const KEYS = ["yami-proto", "yami-ob3", "yami-fuel", ...EXTRA];
