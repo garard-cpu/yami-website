@@ -78,14 +78,18 @@ const Q = [
     opts:["no","maybe","probably","yes!"] },
   { id:"next", tag:"yami's future", title:"you could be part of <em>yami's future</em>.", sub:"what feature would you like yami to have next, or what would be most useful?", type:"text", ph:"i'd love if yami could..." },
   { id:"email", tag:"what's next", title:"want to stay <em>informed</em>?", sub:"yami is working on getting you discounts through doordash and more accurate info from the restaurants on campus. leave your email and we'll keep you posted. optional.", type:"email" },
+  { id:"bugwhere", bugOnly:true, tag:"report a problem", title:"where did something go <em>wrong</em>?", type:"one",
+    opts:["snapping a plate","groceries","order smart","dashboard","signing in","scrolling or the layout","something else"] },
+  { id:"bugwhat", bugOnly:true, tag:"report a problem", title:"what <em>happened</em>?", sub:"tell us what you tapped and what you saw. we read every one and fix it.", type:"text", ph:"i tapped ... and then ..." },
   { id:"done", type:"done" },
 ];
+const BUG = new URLSearchParams(location.search).has("bug");
 
 const A = {};
 let i = 0;
 const card = document.getElementById("card");
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const visible = () => Q.filter((q) => !q.skipUnless || (A.tried || []).includes(q.skipUnless));
+const visible = () => Q.filter((q) => BUG ? (q.bugOnly || q.type === "done") : !q.bugOnly && (!q.skipUnless || (A.tried || []).includes(q.skipUnless)));
 
 function render() {
   const list = visible(), q = list[i];
@@ -112,8 +116,9 @@ function render() {
       const on = (v) => (q.type === "many" ? (cur || []).includes(v) : cur === v);
       body = `<div class="opts">${q.opts.map((t) =>
         `<button class="opt" data-v="${esc(t)}" aria-pressed="${on(t)}"><span>${t}</span></button>`).join("")}</div>
+${q.bugOnly ? "" : `
         <label class="wl">what do you wish it had? <span>(optional)</span></label>
-        <textarea id="wish" class="wish" maxlength="500" placeholder="i wish...">${esc(A[q.id + "_wish"] || "")}</textarea>`;
+        <textarea id="wish" class="wish" maxlength="500" placeholder="i wish...">${esc(A[q.id + "_wish"] || "")}</textarea>`}`;
     } else if (q.type === "text") {
       body = `<textarea id="in" maxlength="1000" placeholder="${q.ph}">${esc(A[q.id] || "")}</textarea>`;
     } else if (q.type === "email") {
@@ -166,6 +171,7 @@ async function save() {
     if (val) answers[k] = val.slice(0, 1000);
   }
   answers.from = (new URLSearchParams(location.search).get("from") || "link").slice(0, 40);
+  if (BUG) answers.type = "problem report";
   // Google Sheet (Yami Feedback + Sign-ups > Survey tab): one row per response.
   await fetch("https://script.google.com/macros/s/AKfycbzO5p-JsMvPEA7UCwNUWDwntpWNsYpiB-LYvA_8rwBbhzEQgSCxB2c4cB8jZsRAT7sZ/exec", { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ kind: "survey", ...answers }) });
   // Also try Firebase; ignore if its rules aren't published yet.
