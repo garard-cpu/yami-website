@@ -1,15 +1,25 @@
 // Brand lookup for the Yami app at /app. After a scan, a student can say which brand a food is
 // ("Chobani" for "Nonfat Greek yogurt"). The app POSTs { food, brand } and gets back
 // { products: [{ name, serving, cal, carb, fat, protein, fiber, sugar, sodium }] } read from real Nutrition Facts labels.
+// It also takes { food, image } instead: a photo of the package, Nutrition Facts panel, barcode side or produce sticker,
+// and Claude reads which product it is.
 // The Claude key lives only in Cloudflare Pages' environment variables (ANTHROPIC_API_KEY), never in the page.
 
 const PROMPT = `You help Yami, a nutrition app for USC students, match a food from a meal photo to the exact product the student ate.
 
-The student tells you the food Yami saw and the brand it came from. List up to 4 real products from that brand that match the food, such as its different fat levels, flavors or sizes (for "Greek yogurt" from "Chobani": Chobani Plain Nonfat Greek Yogurt, Chobani Whole Milk Plain Greek Yogurt, and so on). Put the brand's own product name in name, starting with the brand.
+The student tells you the food Yami saw and the brand it came from. List up to 4 real products from that brand that match the food, such as its different fat levels, flavors or sizes (for "Greek yogurt" from "Chobani": Chobani Plain Nonfat Greek Yogurt, Chobani Whole Milk Plain Greek Yogurt, and so on). Put the brand's own product name in name, starting with the brand, and the brand alone in brand.
 
 Use each product's real Nutrition Facts label for one serving, and say the serving as the label does ("1 container (150g)", "3/4 cup (170g)"). sodium is in mg; everything else except cal is in grams.
 
 Only list products you are confident exist. If the brand doesn't make this food or you aren't sure, return an empty list. Never invent a product.`;
+
+const PHOTO_PROMPT = `You help Yami, a nutrition app for USC students, match a food from a meal photo to the exact product the student ate.
+
+The student scanned a photo of the product: the front of a package, its Nutrition Facts panel, a barcode side, or a sticker on fresh produce. Yami's meal scan called this food the name they give you. Identify the exact product and its brand from the photo.
+
+If a Nutrition Facts panel is readable in the photo, copy its numbers and serving exactly. Otherwise use that product's real label as you know it. For fresh produce with a sticker or no brand (an apple, a banana), use standard nutrition for one item and put the grower or store in name only if the sticker shows it.
+
+Return the one product you see. If you are torn between close variants (plain or vanilla, nonfat or whole milk), return up to 3 with the most likely first. If the photo doesn't show a food product you can identify, return an empty list. Never invent a product. Put the brand's own product name in name, starting with the brand, and the brand alone in brand (empty for unbranded produce); sodium is in mg and everything except cal is in grams.`;
 
 const SCHEMA = {
   type: "object",
@@ -21,9 +31,10 @@ const SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "serving", "cal", "carb", "fat", "protein", "fiber", "sugar", "sodium"],
+        required: ["name", "brand", "serving", "cal", "carb", "fat", "protein", "fiber", "sugar", "sodium"],
         properties: {
           name: { type: "string" },
+          brand: { type: "string" },
           serving: { type: "string" },
           cal: { type: "number" },
           carb: { type: "number" },
@@ -38,7 +49,7 @@ const SCHEMA = {
   },
 };
 
-type Product = { name: string; serving: string; cal: number; carb: number; fat: number; protein: number; fiber: number; sugar: number; sodium: number };
+type Product = { name: string; brand: string; serving: string; cal: number; carb: number; fat: number; protein: number; fiber: number; sugar: number; sodium: number };
 
 const num = (v: unknown, max: number) => (typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(0, Math.round(v * 10) / 10)) : 0);
 
@@ -53,6 +64,7 @@ function clean(raw: unknown): Product[] {
     if (!name || out.some((p) => p.name.toLowerCase() === name.toLowerCase())) continue;
     out.push({
       name,
+      brand: typeof e.brand === "string" ? e.brand.trim().slice(0, 40) : "",
       serving: typeof e.serving === "string" && e.serving.trim() ? e.serving.trim().slice(0, 40) : "1 serving",
       cal: num(e.cal, 2000),
       carb: num(e.carb, 300),
@@ -75,7 +87,7 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
   if (req.method !== "POST") return json({ error: "method" }, 405);
   if (!env.ANTHROPIC_API_KEY) return json({ error: "no-key" }, 503);
 
-  let body: { food?: unknown; brand?: unknown };
+  let body: { food?: unknown; brand?: unknown; image?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -83,7 +95,16 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
   }
   const food = typeof body.food === "string" ? body.food.trim().slice(0, 80) : "";
   const brand = typeof body.brand === "string" ? body.brand.trim().slice(0, 60) : "";
-  if (!food || !brand) return json({ error: "missing" }, 400);
+  const img = typeof body.image === "string" ? /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(body.image) : null;
+  if (typeof body.image === "string" && !img) return json({ error: "bad-image" }, 400);
+  if (img && img[2].length > 7_000_000) return json({ error: "too-big" }, 413);
+  if (!food || (!brand && !img)) return json({ error: "missing" }, 400);
+  const content = img
+    ? [
+        { type: "image", source: { type: "base64", media_type: img[1], data: img[2] } },
+        { type: "text", text: `Yami's meal scan called this food: ${JSON.stringify(food)}` },
+      ]
+    : `Food Yami saw: ${JSON.stringify(food)}\nBrand: ${JSON.stringify(brand)}`;
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -99,8 +120,8 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
         max_tokens: 1500,
         fallbacks: "default",
         output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } },
-        system: PROMPT,
-        messages: [{ role: "user", content: `Food Yami saw: ${JSON.stringify(food)}\nBrand: ${JSON.stringify(brand)}` }],
+        system: img ? PHOTO_PROMPT : PROMPT,
+        messages: [{ role: "user", content }],
       }),
     });
     if (res.status === 429 || res.status === 529) return json({ error: "busy" }, 429);
