@@ -1,6 +1,7 @@
 // Brand lookup for the Yami app at /app. After a scan, a student can say which brand a food is
 // ("Chobani" for "Nonfat Greek yogurt"). The app POSTs { food, brand } and gets back
 // { products: [{ name, serving, cal, carb, fat, protein, fiber, sugar, sodium }] } read from real Nutrition Facts labels.
+// For the grocery steps it takes { food, store, shop: true }: real products of that food or brand the store carries, with prices.
 // It also takes { food, image } instead: a photo of the package, Nutrition Facts panel, barcode side or produce sticker,
 // and Claude reads which product it is.
 // The Claude key lives only in Cloudflare Pages' environment variables (ANTHROPIC_API_KEY), never in the page.
@@ -12,6 +13,12 @@ The student tells you the food Yami saw and the brand it came from. List up to 4
 Use each product's real Nutrition Facts label for one serving, and say the serving as the label does ("1 container (150g)", "3/4 cup (170g)"). sodium is in mg; everything else except cal is in grams.
 
 Only list products you are confident exist. If the brand doesn't make this food or you aren't sure, return an empty list. Never invent a product.`;
+
+const SHOP_PROMPT = `You help Yami, a grocery helper for USC students in Los Angeles, find real products at a specific store.
+
+The student tells you what they want (a food, or a brand like Fage, Chobani or Siete) and the store. List up to 4 specific products this store actually carries. If the request names a brand, every product must be that exact brand, in the sizes and flavors this store stocks. Otherwise pick real brands this store carries (at Trader Joe's, use Trader Joe's own products). Put brand + product + size in name and the brand alone in brand.
+
+Use each product's real Nutrition Facts label for one serving. price_usd is the typical shelf price at this store. sodium is in mg; everything else except cal and price_usd is in grams. Only list products you are confident exist; an empty list is fine.`;
 
 const PHOTO_PROMPT = `You help Yami, a nutrition app for USC students, match a food from a meal photo to the exact product the student ate.
 
@@ -31,7 +38,7 @@ const SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "brand", "serving", "cal", "carb", "fat", "protein", "fiber", "sugar", "sodium"],
+        required: ["name", "brand", "serving", "cal", "carb", "fat", "protein", "fiber", "sugar", "sodium", "price_usd"],
         properties: {
           name: { type: "string" },
           brand: { type: "string" },
@@ -43,13 +50,14 @@ const SCHEMA = {
           fiber: { type: "number" },
           sugar: { type: "number" },
           sodium: { type: "number" },
+          price_usd: { type: "number" },
         },
       },
     },
   },
 };
 
-type Product = { name: string; brand: string; serving: string; cal: number; carb: number; fat: number; protein: number; fiber: number; sugar: number; sodium: number };
+type Product = { name: string; brand: string; serving: string; cal: number; carb: number; fat: number; protein: number; fiber: number; sugar: number; sodium: number; price_usd: number };
 
 const num = (v: unknown, max: number) => (typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(0, Math.round(v * 10) / 10)) : 0);
 
@@ -73,6 +81,7 @@ function clean(raw: unknown): Product[] {
       fiber: num(e.fiber, 100),
       sugar: num(e.sugar, 200),
       sodium: num(e.sodium, 5000),
+      price_usd: num(e.price_usd, 200),
     });
   }
   return out.slice(0, 4);
@@ -87,7 +96,7 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
   if (req.method !== "POST") return json({ error: "method" }, 405);
   if (!env.ANTHROPIC_API_KEY) return json({ error: "no-key" }, 503);
 
-  let body: { food?: unknown; brand?: unknown; image?: unknown };
+  let body: { food?: unknown; brand?: unknown; image?: unknown; store?: unknown; shop?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -98,13 +107,17 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
   const img = typeof body.image === "string" ? /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(body.image) : null;
   if (typeof body.image === "string" && !img) return json({ error: "bad-image" }, 400);
   if (img && img[2].length > 7_000_000) return json({ error: "too-big" }, 413);
-  if (!food || (!brand && !img)) return json({ error: "missing" }, 400);
+  const shop = body.shop === true;
+  const store = typeof body.store === "string" ? body.store.trim().slice(0, 80) : "";
+  if (!food || (!brand && !img && !shop)) return json({ error: "missing" }, 400);
   const content = img
     ? [
         { type: "image", source: { type: "base64", media_type: img[1], data: img[2] } },
         { type: "text", text: `Yami's meal scan called this food: ${JSON.stringify(food)}` },
       ]
-    : `Food Yami saw: ${JSON.stringify(food)}\nBrand: ${JSON.stringify(brand)}`;
+    : shop
+      ? `The student wants: ${JSON.stringify(food)}\nStore: ${JSON.stringify(store || "a Los Angeles grocery store")}`
+      : `Food Yami saw: ${JSON.stringify(food)}\nBrand: ${JSON.stringify(brand)}`;
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -120,7 +133,7 @@ export const onRequest = async ({ request: req, env }: { request: Request; env: 
         max_tokens: 1500,
         fallbacks: "default",
         output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } },
-        system: img ? PHOTO_PROMPT : PROMPT,
+        system: img ? PHOTO_PROMPT : shop ? SHOP_PROMPT : PROMPT,
         messages: [{ role: "user", content }],
       }),
     });
